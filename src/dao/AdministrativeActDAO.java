@@ -12,7 +12,7 @@ public class AdministrativeActDAO extends BaseDAO<AdministrativeAct> {
     }
 
     @Override
-    protected List<AdministrativeAct> getEntitiesByResultSet(ResultSet resultSet) {
+    protected List<AdministrativeAct> findEntitiesByResultSet(ResultSet resultSet) {
         return List.of();
     }
 }

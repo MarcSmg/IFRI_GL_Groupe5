@@ -21,7 +21,7 @@ public abstract class BaseDAO<T> {
 
         try (Statement stmt = connection.createStatement();
              ResultSet resultSet = stmt.executeQuery(query)) {
-            return getEntitiesByResultSet(resultSet);
+            return findEntitiesByResultSet(resultSet);
         } catch (SQLException e) {
             System.err.println("!! Une erreur est survenue lors d'une requête getAll sur la table " + tableName + " : " + e.getMessage());
         }
@@ -29,14 +29,14 @@ public abstract class BaseDAO<T> {
         return null;
     }
 
-    public T getByID(int id) {
+    public T findByID(int id) {
 
         String query = "SELECT * FROM " + tableName + " WHERE id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                List<T> results = getEntitiesByResultSet(resultSet);
+                List<T> results = findEntitiesByResultSet(resultSet);
                 if (results == null) return null;
                 return results.isEmpty() ? null : results.get(0);
             }
@@ -47,7 +47,7 @@ public abstract class BaseDAO<T> {
         return null;
     }
 
-    public int getCountInDB() {
+    public int findCountInDB() {
 
         String query = "SELECT COUNT(*) FROM " + tableName;
 
@@ -62,7 +62,7 @@ public abstract class BaseDAO<T> {
 
     }
 
-    protected abstract List<T> getEntitiesByResultSet(ResultSet resultSet);
+    protected abstract List<T> findEntitiesByResultSet(ResultSet resultSet);
 
     protected Connection getConnection() {
         connection = DatabaseConnection.getInstance().getConnection();
