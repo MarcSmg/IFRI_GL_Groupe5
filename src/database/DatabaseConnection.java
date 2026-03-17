@@ -19,24 +19,6 @@ public class DatabaseConnection {
         } catch (SQLException e) {
             System.err.println("!! Une erreur est subvenue lors de la connection : " + e.getMessage());
         }
-
-//        if (connection != null){
-//            try (Statement stmt = connection.createStatement()){
-//                SeedQueries.createTables(stmt);
-//                SeedQueries.insertBaseDBStatus(stmt);
-//                SeedQueries.insertBaseIdentifiers(stmt);
-//                File dbFile = new File(DB_NAME + ".sqlite");
-//                if (dbFile.exists()){
-//                    if (!DatabaseStatus.isIsInitialized(stmt)){
-//                        boolean inserted = SeedQueries.insertBaseData(stmt);
-//                        if (inserted) DatabaseStatus.setStatusToInitialized(stmt);
-//                    }
-//                }
-//            }
-//            catch (SQLException e) {
-//                System.err.println("!! Une erreur est subvenue lors de la création des tables : " + e.getMessage());
-//            }
-//        }
     }
 
     public static synchronized DatabaseConnection getInstance() {
