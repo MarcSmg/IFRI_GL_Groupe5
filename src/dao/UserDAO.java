@@ -61,5 +61,20 @@ public class UserDAO {
         }
         
     }
+    
+    public boolean updateUserStatus(int userId, boolean status) {
+    String sql = "UPDATE users SET is_active = ? WHERE id = ?";
+    try (Connection conn = DatabaseConnection.getInstance().getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        
+        pstmt.setBoolean(1, status);
+        pstmt.setInt(2, userId);
+        
+        return pstmt.executeUpdate() > 0;
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+    }
+}
 }
 

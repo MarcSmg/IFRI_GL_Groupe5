@@ -23,8 +23,7 @@ public class WhiteListDAO {
         ResultSet rs = pstmt.executeQuery();
         
         if (rs.next()) {
-            // On crée l'objet avec les VRAIS noms de colonnes de ta DB
-            return new WhitelistEntry(
+            return new WhiteListEntry(
                 String.valueOf(rs.getInt("matricule")),
                 rs.getString("lastName"),
                 rs.getString("firstName"),
