@@ -16,6 +16,7 @@ public class AdministrativeAct {
     private String signatory;
     private boolean signed = false;
     private boolean archived = false;
+    private String actUrl;
 
     public int getId() {
         return id;
@@ -41,6 +42,10 @@ public class AdministrativeAct {
         return signed;
     }
 
+    public String getActUrl() {
+        return actUrl;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -63,6 +68,10 @@ public class AdministrativeAct {
 
     public void setArchived(boolean archived) {
         this.archived = archived;
+    }
+
+    public void setActUrl(String actUrl) {
+        this.actUrl = actUrl;
     }
 
     public void archive() {
@@ -92,7 +101,9 @@ public class AdministrativeAct {
 
             String fileName = "doc_" + this.getId() + "_" + System.currentTimeMillis() + ".docx";
 
-            FileOutputStream out = new FileOutputStream(folder + fileName);
+            actUrl = folder + fileName;
+
+            FileOutputStream out = new FileOutputStream(actUrl);
             document.write(out);
             out.close();
             document.close();
