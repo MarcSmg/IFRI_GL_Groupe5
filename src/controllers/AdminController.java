@@ -6,6 +6,7 @@ package controllers;
 import models.*;
 import dao.*;
 import utilities.*;
+import models.enums.*;
 /**
  *
  * @author Héloïse
@@ -20,7 +21,7 @@ public class AdminController {
                
     }
     
-    public boolean creerAgent(String nom, String prenom, String email, Function func){
+    public boolean creerAgent(String nom, String prenom, String email, AgentFunction func){
         // generation du mot de passe 
         String mdpTemp = SecurityUtils.generateTempPassword();
         //hashage du mdp
@@ -34,5 +35,14 @@ public class AdminController {
            return false;
        }
        
+    }
+    
+    public boolean addUsagerToWhiteList(String matricule, String lastName, String firstName, String fieldOfStudy, String studyLevel ){
+        
+        try{
+            
+        }catch(Exception e){
+            System.err.println("Erreur lors de l'ajout de l'étudiant sur la liste blanche" + e.getMessage());
+        }
     }
 }

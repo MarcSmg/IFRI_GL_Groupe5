@@ -18,11 +18,7 @@ public class UserDAO {
         
         
         
-    }
-    
-
-    
-    
+    }    
     public User findByLoginOrEmail(String identifier) {
             String sql = "SELECT * FROM users WHERE login = ? OR email = ?";
             try (Connection conn = DatabaseConnection.getInstance().getConnection();
@@ -51,7 +47,7 @@ public class UserDAO {
     public boolean changePassword(int id , String pwd){
         String sql = "UPDATE users SET password = ?, is_temporary= ?,  WHERE id = ? ";
         try(Connection conn = DatabaseConnection.getInstance().getConnection();
-                PreparedStatement pstmt = conn.prepareStatement(sql);){
+            PreparedStatement pstmt = conn.prepareStatement(sql);){
             pstmt.setString(1, pwd);
             pstmt.setBoolean(2, false);
             pstmt.setInt(3, id);

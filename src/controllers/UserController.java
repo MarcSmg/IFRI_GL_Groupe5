@@ -17,10 +17,13 @@ public class UserController {
     }
     
     public boolean updatePassword(String pwd){
-        int id = SessionManager.getUser().getId();
-        String pwdHashe = SecurityUtils.hashPassword(pwd);
-       if(userDAO.changePassword(id, pwdHashe) ){
-           
-       }
+        try{
+            int id = SessionManager.getUser().getId();
+        String pwdHash = SecurityUtils.hashPassword(pwd);
+        return userDAO.changePassword(id, pwdHash);
+        }catch(Exception e){
+            System.err.println("Erreur lors du changement de mot de passe" + e.getMessage());
+            return false;
+        }       
     }
 }
