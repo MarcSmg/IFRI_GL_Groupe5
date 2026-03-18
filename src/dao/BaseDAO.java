@@ -7,7 +7,7 @@ import java.util.List;
 
 public abstract class BaseDAO<T> {
 
-    private final String tableName;
+    protected final String tableName;
     private Connection connection;
 
     public BaseDAO(String tableName) {
@@ -15,7 +15,7 @@ public abstract class BaseDAO<T> {
         this.connection = DatabaseConnection.getInstance().getConnection();
     }
 
-    public List<T> getAll() {
+    public List<T> findAll() {
 
         String query = "SELECT * FROM " + tableName;
 
@@ -58,6 +58,20 @@ public abstract class BaseDAO<T> {
             System.err.println("!! Une erreur est survenue lors d'une requête getCountInDB sur la table " + tableName + " : " + e.getMessage());
         }
 
+        return 0;
+
+    }
+
+    public int delete(int id) {
+        String sql = "DELETE FROM " + tableName + "WHERE id = ?";
+
+        try (PreparedStatement pstmt = getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            pstmt.setInt(1, id);
+
+            return pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("!! Une erreur est survenue lors d'une supression sur la table " + tableName + " : " + e.getMessage());
+        }
         return 0;
 
     }

@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package models;
+import models.enums.Role;
 
 /**
  *
@@ -10,7 +11,7 @@ package models;
  */
 public class Administrateur extends User {
     private String login; 
-    public Administrateur(String login, String nom,String prenom, String email, Role role,String  motDePasseTemporaire){
+    public Administrateur(String login, String nom, String prenom, String email, Role role, String  motDePasseTemporaire){
      
         super(nom, prenom, email, Role.ADMINISTRATEUR, motDePasseTemporaire, true);
         this.login = login;

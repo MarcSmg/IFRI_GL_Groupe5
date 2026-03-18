@@ -4,6 +4,8 @@
  */
 package models;
 
+import models.enums.Role;
+
 /**
  *
  * @author Héloïse

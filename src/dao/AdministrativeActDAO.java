@@ -1,18 +1,90 @@
 package dao;
 
 import models.AdministrativeAct;
-import utilities.DbTable;
+import models.AgentAdministratif;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AdministrativeActDAO extends BaseDAO<AdministrativeAct> {
     public AdministrativeActDAO() {
-        super(DbTable.ACT.getName());
+        super("actes_administratifs");
     }
 
     @Override
     protected List<AdministrativeAct> findEntitiesByResultSet(ResultSet resultSet) {
-        return List.of();
+
+        List<AdministrativeAct> administrativeActsList = new ArrayList<>();
+
+        try {
+            while (resultSet.next()) {
+                AdministrativeAct administrativeAct = new AdministrativeAct();
+                administrativeAct.setId(resultSet.getInt("id"));
+                administrativeAct.setType(resultSet.getString("type"));
+                administrativeAct.setContent(resultSet.getString("contenu"));
+                administrativeAct.setSignatoryID(resultSet.getInt("id_signataire"));
+                administrativeAct.setIsSigned(resultSet.getBoolean("est_signe"));
+                administrativeAct.setIsArchived(resultSet.getBoolean("est_archive"));
+
+                administrativeActsList.add(administrativeAct);
+            }
+        } catch (SQLException e) {
+            System.err.println("!! Une erreur est subvenue lors d'une collecte de données : " + e.getMessage());
+        }
+
+        return administrativeActsList;
     }
+
+    public int insert(AdministrativeAct act) {
+        String sql = "INSERT INTO " + tableName +
+                " (type, contenu, id_signataire, est_signe, est_archive)" +
+                " VALUES (?, ?, ?, ?. ?)" +
+                ";";
+
+        try (PreparedStatement pstmt = getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            pstmt.setString(1, act.getType());
+            pstmt.setString(2, act.getContent());
+            pstmt.setInt(3, act.getSignatoryID());
+            pstmt.setBoolean(4, act.getIsSigned());
+            pstmt.setBoolean(5, act.getIsArchived());
+
+            ResultSet rs = pstmt.getGeneratedKeys();
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("!! Une erreur est survenue lors d'une insertion de données : " + e.getMessage());
+        }
+        return -1;
+    }
+
+    public int update(AdministrativeAct act) {
+        String sql = "UPDATE " + tableName +
+                " SET type = ?, contenu = ?, id_signataire = ?, est_signe = ?, est_archive = ?" +
+                " WHERE id = ?" +
+                ";";
+        try (PreparedStatement pstmt = getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            pstmt.setString(1, act.getType());
+            pstmt.setString(2, act.getContent());
+            pstmt.setInt(3, act.getSignatoryID());
+            pstmt.setBoolean(4, act.getIsSigned());
+            pstmt.setBoolean(5, act.getIsArchived());
+            pstmt.setInt(6, act.getId());
+
+            return pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            System.err.println("!! Une erreur est survenue lors d'une modification de données : " + e.getMessage());
+        }
+        return 0;
+    }
+
 }

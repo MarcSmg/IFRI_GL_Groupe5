@@ -6,6 +6,7 @@ package dao;
 import models.*;
 import java.sql.*;
 import database.*;
+import models.enums.Role;
 import utilities.*;
 
 /**
