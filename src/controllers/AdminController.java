@@ -24,14 +24,14 @@ public class AdminController {
     private AgentAdministratifDAO agentDAO;
     private WhiteListDAO whiteListDAO; 
     private UserDAO userDAO;
-      private AgentPermissionsDAO permissionsDAO;
+      private AgentsPermissionsDAO permissionsDAO;
 
     public AdminController(Administrateur admin) {
         this.adminConnecte = admin;
         this.agentDAO = new AgentAdministratifDAO();
         this.whiteListDAO = new WhiteListDAO(); 
         this.userDAO = new UserDAO();
-        this.permissionsDAO = new AgentPermissionsDAO();
+        this.permissionsDAO = new AgentsPermissionsDAO();
     }
 
    
@@ -69,9 +69,8 @@ public class AdminController {
         try (FileInputStream fis = new FileInputStream(file);
              Workbook workbook = new XSSFWorkbook(fis)) {
 
-            Sheet sheet = workbook.getSheetAt(0); // On prend la première feuille
+            Sheet sheet = workbook.getSheetAt(0); 
             
-            // On boucle sur les lignes (on commence à 1 pour ignorer l'en-tête)
             for (int i = 1; i <= sheet.getLastRowNum(); i++) {
                 Row row = sheet.getRow(i);
                 if (row == null) continue;
@@ -90,7 +89,6 @@ public class AdminController {
                 entries.add(entry); // Ajout à la liste (ton "tableau" dynamique)
             }
 
-            // Envoi de la liste complète au DAO pour insertion
             return whiteListDAO.saveAll(entries);
 
         } catch (Exception e) {
