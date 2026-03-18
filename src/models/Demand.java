@@ -3,38 +3,56 @@ package models;
 import models.enums.DemandStatus;
 
 public class Demand {
+    private int id;
     private String demandNumber;
-    private DemandStatus status;
+    private String status;
+    private String creationDate;
+
+    public int getId() {
+        return id;
+    }
 
     public String getDemandNumber() {
         return demandNumber;
     }
 
-    public DemandStatus getStatus() {
+    public String getStatus() {
         return status;
+    }
+
+    public String getCreationDate() {
+        return creationDate;
     }
 
     public void setDemandNumber(String demandNumber) {
         this.demandNumber = demandNumber;
     }
 
-    public void setStatus(DemandStatus status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setCreationDate(String creationDate) {
+        this.creationDate = creationDate;
+    }
+
     public void submit() {
-        setStatus(DemandStatus.PENDING);
+        setStatus(DemandStatus.PENDING.name());
     }
 
     public void save() {
-        setStatus(DemandStatus.SAVED);
+        setStatus(DemandStatus.SAVED.name());
     }
 
     public void reject() {
-        setStatus(DemandStatus.REJECTED);
+        setStatus(DemandStatus.REJECTED.name());
     }
 
     public void validate() {
-        setStatus(DemandStatus.VALIDATED);
+        setStatus(DemandStatus.VALIDATED.name());
     }
 }

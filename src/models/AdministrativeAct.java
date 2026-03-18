@@ -1,8 +1,6 @@
 package models;
-import models.enums.*;
 import org.apache.poi.xwpf.usermodel.*;
 
-import javax.swing.text.DateFormatter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -11,18 +9,25 @@ import java.time.format.DateTimeFormatter;
 
 public class AdministrativeAct {
     private int id;
-    private AdministrativeActType type;
+    private String type;
     private String content;
-    private String signatory;
-    private boolean signed = false;
-    private boolean archived = false;
+    private int signatoryID;
+    private boolean isSigned = false;
+    private boolean isArchived = false;
     private String actUrl;
+
+    public AdministrativeAct() {}
+
+    public AdministrativeAct(String type, String content) {
+        this.type = type;
+        this.content = content;
+    }
 
     public int getId() {
         return id;
     }
 
-    public AdministrativeActType getType() {
+    public String getType() {
         return type;
     }
 
@@ -30,16 +35,16 @@ public class AdministrativeAct {
         return content;
     }
 
-    public String getSignatory() {
-        return signatory;
+    public int getSignatoryID() {
+        return signatoryID;
     }
 
-    public boolean getArchived() {
-        return archived;
+    public boolean getIsArchived() {
+        return isArchived;
     }
 
-    public boolean getSigned() {
-        return signed;
+    public boolean getIsSigned() {
+        return isSigned;
     }
 
     public String getActUrl() {
@@ -50,7 +55,7 @@ public class AdministrativeAct {
         this.id = id;
     }
 
-    public void setType(AdministrativeActType type) {
+    public void setType(String type) {
         this.type = type;
     }
 
@@ -58,16 +63,16 @@ public class AdministrativeAct {
         this.content = content;
     }
 
-    public void setSignatory(String signatory) {
-        this.signatory = signatory;
+    public void setSignatoryID(int signatoryID) {
+        this.signatoryID = signatoryID;
     }
 
-    public void setSigned(boolean signed) {
-        this.signed = signed;
+    public void setIsSigned(boolean signed) {
+        this.isSigned = signed;
     }
 
-    public void setArchived(boolean archived) {
-        this.archived = archived;
+    public void setIsArchived(boolean archived) {
+        this.isArchived = archived;
     }
 
     public void setActUrl(String actUrl) {
@@ -75,11 +80,11 @@ public class AdministrativeAct {
     }
 
     public void archive() {
-        setArchived(true);
+        setIsArchived(true);
     }
 
     public void signAct() {
-        setSigned(true);
+        setIsSigned(true);
     }
 
     public boolean generateDocx() {

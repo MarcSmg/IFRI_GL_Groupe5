@@ -39,13 +39,13 @@ public class DatabaseInitializer {
             + "matricule INT NOT NULL UNIQUE, "
             + "fieldOfStudy VARCHAR(100), "
             + "study_level VARCHAR(50), "
-            + "birth_date DATE, " 
+            + "birth_date DATE, "
             + "place_birth VARCHAR(150), "
             + "gender VARCHAR(10), "
             + "nationalite VARCHAR(100), "
             + "CONSTRAINT fk_usager_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE"
             + ");";
-            
+
             String createWhiteList = "CREATE TABLE IF NOT EXISTS white_list_usagers ("
                 + "matricule VARCHAR(50) PRIMARY KEY, "
                 + "lastName VARCHAR(100), "
@@ -57,7 +57,23 @@ public class DatabaseInitializer {
                 + "nationalite VARCHAR(100), "
                 + "has_account BOOLEAN DEFAULT FALSE NOT NULL "
                 + ");";
-            
+
+        String createAdministrativeActTable = "CREATE TABLE IF NOT EXISTS actes_administratifs ("
+                + "id INT PRIMARY KEY AUTO_INCREMENT, "
+                + "type VARCHAR(255), "
+                + "contenu VARCHAR(255), "
+                + "id_signataire INT, "
+                + "est_signe BOOLEAN DEFAULT FALSE, "
+                + "est_archive BOOLEAN DEFAULT FALSE"
+                + ");";
+
+        String createDemandTable = "CREATE TABLE IF NOT EXISTS demandes ("
+                + "id INT PRIMARY KEY AUTO_INCREMENT, "
+                + "numero_demande VARCHAR(255), "
+                + "statut VARCHAR(255), "
+                + "date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
+                + ");";
+
             String createAgentsPermissions = "CREATE TABLE IF NOT EXISTS agents_permissions ("
                     + "id INT AUTO_INCREMENT PRIMARY KEY, "
                     + "agent_id INT, "
@@ -65,7 +81,7 @@ public class DatabaseInitializer {
                     + "act_type VARCHAR(50)"
                     + "CONSTRAINT fk_agent_acte FOREIGN KEY(agent_id) REFERENCES agents(id) ON DELETE CASCADE"
                     + ")";
-        
+
         try(Connection conn = DatabaseConnection.getInstance().getConnection();
             Statement stmt = conn.createStatement()){
                 stmt.execute(createUserTable);
@@ -73,7 +89,9 @@ public class DatabaseInitializer {
                 stmt.execute(createUsagerTable);
                 stmt.execute(createWhiteList);
                 stmt.execute(createAgentsPermissions);
-            
+                stmt.execute(createAdministrativeActTable);
+                stmt.execute(createDemandTable);
+
         }catch(SQLException e){
             System.err.println("!!Erreur d'initialisation de la base de données" + e.getMessage());
         }

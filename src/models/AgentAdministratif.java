@@ -4,6 +4,7 @@
  */
 package models;
 import models.enums.AgentFunction;
+import models.enums.Role;
 
 /**
  *
