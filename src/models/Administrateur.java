@@ -10,7 +10,9 @@ import models.enums.Role;
  * @author Héloïse
  */
 public class Administrateur extends User {
-    private String login; 
+    private String login;
+    public Administrateur() {};
+
     public Administrateur(String login, String nom, String prenom, String email, Role role, String  motDePasseTemporaire){
      
         super(nom, prenom, email, Role.ADMINISTRATEUR, motDePasseTemporaire, true);
