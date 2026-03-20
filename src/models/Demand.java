@@ -8,6 +8,13 @@ public class Demand {
     private String status;
     private String creationDate;
 
+    public Demand() {}
+
+    public Demand(String demandNumber, String status) {
+        this.demandNumber = demandNumber;
+        this.status = status;
+    }
+
     public int getId() {
         return id;
     }
