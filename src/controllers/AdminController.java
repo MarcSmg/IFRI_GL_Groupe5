@@ -35,7 +35,7 @@ public class AdminController {
     }
 
    
-    public boolean creerAgent(String nom, String prenom, String email, AgentFunction func) {
+    public boolean addAgent(String nom, String prenom, String email, AgentFunction func) {
         String mdpTemp = SecurityUtils.generateTempPassword();
         String mdpHache = SecurityUtils.hashPassword(mdpTemp);
         AgentAdministratif agent = new AgentAdministratif(nom, prenom, email, func, mdpHache);
@@ -43,7 +43,7 @@ public class AdminController {
         
         try {
             System.out.println("Tentative de création de l'agent : " + email);
-            return agentDAO.addAgent(agent);
+            return agentDAO.createAgent(agent);
         } catch (Exception e) {
             System.err.println("Erreur creation agent : " + e.getMessage());
             return false;

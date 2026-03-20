@@ -15,6 +15,6 @@ public enum AgentFunction {
     
     CHEF_SCOLARITE,
     
-    b
+    
     
 }

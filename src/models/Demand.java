@@ -1,4 +1,6 @@
 package models;
+import java.time.LocalDateTime;
+import models.enums.AdministrativeActType;
 
 import models.enums.DemandStatus;
 
@@ -6,10 +8,27 @@ public class Demand {
     private int id;
     private String demandNumber;
     private String status;
-    private String creationDate;
-
+    private AdministrativeActType actType;
+    private int usagerId;
+    private LocalDateTime creationDate;
+    
+    public Demand(AdministrativeActType actType){
+        this.creationDate = LocalDateTime.now();
+        this.demandNumber = "";
+        this.status = DemandStatus.SAVED.name();
+        this.actType = actType;
+    }
+    
+    public Demand(){
+        
+    }
+    //les getters
     public int getId() {
         return id;
+    }
+    
+    public int getUsagerId(){
+        return usagerId;
     }
 
     public String getDemandNumber() {
@@ -23,7 +42,12 @@ public class Demand {
     public String getCreationDate() {
         return creationDate;
     }
-
+    public String getActType(){
+        return actType.name();
+    }
+    
+    //les setters
+    
     public void setDemandNumber(String demandNumber) {
         this.demandNumber = demandNumber;
     }

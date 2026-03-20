@@ -69,8 +69,10 @@ public class DatabaseInitializer {
 
         String createDemandTable = "CREATE TABLE IF NOT EXISTS demandes ("
                 + "id INT PRIMARY KEY AUTO_INCREMENT, "
+                + "user_id INT"
                 + "numero_demande VARCHAR(255), "
-                + "statut VARCHAR(255), "
+                + "statut VARCHAR(255),"
+                + "type_act VARCHAR(50) "
                 + "date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
                 + ");";
 

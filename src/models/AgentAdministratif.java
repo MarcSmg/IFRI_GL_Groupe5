@@ -12,6 +12,8 @@ import models.enums.Role;
  */
 public class AgentAdministratif extends User {
     private AgentFunction function;
+   private byte[] signature;
+   private byte[] cachet ;
     public AgentAdministratif(String nom, String prenom, String email,AgentFunction func,  String motDePasseTemporaire){
         super(nom, prenom, email, Role.AGENT_ADMINISTRATIF, motDePasseTemporaire, true);
         this.function = func;

@@ -2,11 +2,12 @@ package dao;
 
 import models.Demand;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
+import database.*;
+import models.*;
+import models.enums.DemandStatus;
+import utilities.*;
 import java.util.List;
 
 public class DemandDAO extends BaseDAO<Demand> {
@@ -58,7 +59,7 @@ public class DemandDAO extends BaseDAO<Demand> {
 
     public int update(Demand demand) {
         String sql = "UPDATE " + tableName +
-                "SET numero_demande = ?, statut = ?" +
+                "SET statut = ?" +
                 "WHERE id = ?" +
                 ";";
 
@@ -73,5 +74,46 @@ public class DemandDAO extends BaseDAO<Demand> {
             System.err.println("!! Une erreur est survenue lors d'une insertion de données : " + e.getMessage());
         }
         return -1;
+    }
+    
+    public String registerEtGenererRef(Demand d) {
+    String sql = "INSERT INTO demandes (usager_id, type_acte, statut) VALUES (?, ?, ?)";
+    
+    try (Connection conn = DatabaseConnection.getInstance().getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        
+        pstmt.setInt(1, d.getUsagerId());
+        pstmt.setString(2, d.getActType());
+        pstmt.setString(3, "SAVE");
+
+        pstmt.executeUpdate();
+
+        ResultSet rs = pstmt.getGeneratedKeys();
+        if (rs.next()) {
+            int uniqueId = rs.getInt(1); 
+            return StringUtilities.formaterNumero("DEMD", uniqueId); 
+        }
+    } catch (SQLException e) { e.printStackTrace(); }
+    return null;
+}
+    
+    public DemandStatus seeStatus(int id){
+        String sql = "SELECT statut FROM demandes WHERE id = ?";
+        try(Connection conn = DatabaseConnection.getInstance().getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)){
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            if(rs.next()){
+                String statut = rs.getString("statut");
+                return DemandStatus.valueOf(statut);
+            }
+            
+            
+            
+        }catch(Exception e ){
+            System.err.println("Erreur lors de la lecture du statut de la demande" + e.getMessage());
+            return null;
+        }
+        
     }
 }

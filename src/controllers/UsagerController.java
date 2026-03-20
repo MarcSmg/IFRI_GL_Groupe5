@@ -3,6 +3,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package controllers;
+import models.enums.AdministrativeActType;
+import models.enums.DemandStatus;
+        
+import models.*;
+import dao.*;
 
 /**
  *
@@ -10,4 +15,35 @@ package controllers;
  */
 public class UsagerController {
     
+    private DemandDAO demandDAO;
+    public UsagerController(){
+        demandDAO = new DemandDAO();
+    }
+    
+    public boolean createDemand(AdministrativeActType actType){
+        try{
+            Demand d = new Demand(actType);
+            String numeroDemande = demandDAO.registerEtGenererRef(d);
+            d.setDemandNumber(numeroDemande);
+            
+            
+           return true;
+        }catch(Exception e){
+            System.err.println("Erreur lors de la création de demande");
+            return false;
+        }
+    }
+    
+    public String consulterEtatDemand(int id){
+        try{
+            DemandStatus statutDB = demandDAO.seeStatus(id);
+            String statut = statutDB.getLabel();
+            return statut;             
+        }catch(Exception e){
+            System.err.println("Statu non trouvé en BD");
+            return null;
+        }
+              
+        
+    }
 }

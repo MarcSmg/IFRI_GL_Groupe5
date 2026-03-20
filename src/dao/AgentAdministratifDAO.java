@@ -13,7 +13,7 @@ import database.*;
  */
 public class AgentAdministratifDAO {
     
-    public boolean addAgent(AgentAdministratif agent){
+    public boolean createAgent(AgentAdministratif agent){
         String sql = "INSERT INTO agents(lastName, firstName, email, role, func, isTemporary) VALUES (?, ?, ?, ?, ?,?)";
         try(Connection conn = DatabaseConnection.getInstance().getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);  ){
@@ -32,5 +32,24 @@ public class AgentAdministratifDAO {
             return false;
         }
     }
+    
+    
+    public byte[] getAgentSignature(int agentId) {
+    String sql = "SELECT signature FROM agents WHERE id_agent = ?";
+    try (Connection conn = DatabaseConnection.getInstance().getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        
+        pstmt.setInt(1, agentId);
+        ResultSet rs = pstmt.executeQuery();
+        
+        if (rs.next()) {
+            return rs.getBytes("signature"); 
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return null;
+}
+    
     
 }
