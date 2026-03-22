@@ -7,7 +7,7 @@ import models.enums.DemandStatus;
 public class Demand {
     private int id;
     private String demandNumber;
-    private String status;
+    private DemandStatus status;
     private AdministrativeActType actType;
     private int usagerId;
     private LocalDateTime creationDate;
@@ -15,7 +15,7 @@ public class Demand {
     public Demand(AdministrativeActType actType){
         this.creationDate = LocalDateTime.now();
         this.demandNumber = "";
-        this.status = DemandStatus.SAVED.name();
+        this.status = DemandStatus.SAVED;
         this.actType = actType;
     }
     
@@ -23,7 +23,7 @@ public class Demand {
     //les getters
     public Demand() {}
 
-    public Demand(String demandNumber, String status) {
+    public Demand(String demandNumber, DemandStatus status) {
         this.demandNumber = demandNumber;
         this.status = status;
     }
@@ -40,11 +40,11 @@ public class Demand {
         return demandNumber;
     }
 
-    public String getStatus() {
+    public DemandStatus getStatus() {
         return status;
     }
 
-    public String getCreationDate() {
+    public LocalDateTime getCreationDate() {
         return creationDate;
     }
     public String getActType(){
@@ -57,7 +57,7 @@ public class Demand {
         this.demandNumber = demandNumber;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(DemandStatus status) {
         this.status = status;
     }
 
@@ -65,23 +65,29 @@ public class Demand {
         this.id = id;
     }
 
-    public void setCreationDate(String creationDate) {
+    public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
-
+    public void setUsagerId(int id){
+        this.usagerId = id;
+    }
+    
+    public void setTypeAct(AdministrativeActType type){
+        this.actType = type;
+    }
     public void submit() {
-        setStatus(DemandStatus.PENDING.name());
+        setStatus(DemandStatus.PENDING);
     }
 
     public void save() {
-        setStatus(DemandStatus.SAVED.name());
+        setStatus(DemandStatus.SAVED);
     }
 
     public void reject() {
-        setStatus(DemandStatus.REJECTED.name());
+        setStatus(DemandStatus.REJECTED);
     }
 
     public void validate() {
-        setStatus(DemandStatus.VALIDATED.name());
+        setStatus(DemandStatus.VALIDATED);
     }
 }

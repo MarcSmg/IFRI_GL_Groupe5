@@ -18,7 +18,7 @@ public class UserController {
     
     public boolean updatePassword(String pwd){
         try{
-            int id = SessionManager.getUser().getId();
+            int id = SessionManager.getInstance().getUserId();
         String pwdHash = SecurityUtils.hashPassword(pwd);
         return userDAO.changePassword(id, pwdHash);
         }catch(Exception e){

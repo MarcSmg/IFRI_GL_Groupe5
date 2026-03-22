@@ -1,0 +1,261 @@
+package views;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.awt.event.*;
+import dao.*;
+
+public class ChangePasswordForm {
+
+    private JPanel panelPrincipal;
+
+    private JPasswordField ancienPasswordField;
+    private JPasswordField nouveauPasswordField;
+    private JPasswordField confirmPasswordField;
+    private UserDAO userDAO;
+
+    private JButton confirmerButton;
+
+    public ChangePasswordForm() {
+        userDAO = new UserDAO();
+        initComponents();
+    }
+
+    private void initComponents() {
+
+        panelPrincipal = new JPanel(new BorderLayout());
+        panelPrincipal.setBackground(Color.WHITE);
+        panelPrincipal.setPreferredSize(new Dimension(580, 560));
+        panelPrincipal.setBorder(new EmptyBorder(60, 80, 56, 80));
+
+        // ── En-tête ──────────────────────────────────────────────────────
+        JPanel header = new JPanel();
+        header.setBackground(Color.WHITE);
+        header.setLayout(new BoxLayout(header, BoxLayout.Y_AXIS));
+
+        JLabel title = new JLabel("Changer le mot de passe");
+        title.setFont(new Font("Segoe UI", Font.BOLD, 30));
+        title.setForeground(new Color(18, 18, 18));
+        title.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JLabel subtitle = new JLabel("Choisissez un nouveau mot de passe sécurisé.");
+        subtitle.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        subtitle.setForeground(new Color(145, 145, 145));
+        subtitle.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        header.add(title);
+        header.add(Box.createVerticalStrut(5));
+        header.add(subtitle);
+        header.add(Box.createVerticalStrut(36));
+
+        // ── Formulaire ───────────────────────────────────────────────────
+        JPanel form = new JPanel();
+        form.setBackground(Color.WHITE);
+        form.setLayout(new BoxLayout(form, BoxLayout.Y_AXIS));
+
+        ancienPasswordField  = addPasswordField(form, "Ancien mot de passe",          "Entrez votre ancien mot de passe");
+        nouveauPasswordField = addPasswordField(form, "Nouveau mot de passe",          "Entrez votre nouveau mot de passe");
+        confirmPasswordField = addPasswordField(form, "Confirmer nouveau mot de passe","Confirmez votre nouveau mot de passe");
+
+        form.add(Box.createVerticalStrut(28));
+
+        // ── Bouton Confirmer ─────────────────────────────────────────────
+        confirmerButton = new MatriculeForm.RoundedButton(
+                "Confirmer", new Color(33, 119, 240), new Color(21, 96, 200), 12);
+        confirmerButton.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        confirmerButton.setForeground(Color.WHITE);
+        confirmerButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+        confirmerButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
+        confirmerButton.setPreferredSize(new Dimension(420, 50));
+        confirmerButton.addActionListener(e -> {
+            // la logique de changement de mot de passe
+            userDAO.changePassword(id, pwd);
+        });
+
+        form.add(confirmerButton);
+        form.add(Box.createVerticalStrut(16));
+
+        // Bouton Annuler outline
+        MatriculeForm.OutlineButton annulerButton = new MatriculeForm.OutlineButton(
+                "Annuler", new Color(210, 210, 210), new Color(245, 245, 245), 12);
+        annulerButton.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        annulerButton.setForeground(new Color(80, 80, 80));
+        annulerButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+        annulerButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, 48));
+        annulerButton.setPreferredSize(new Dimension(420, 48));
+        annulerButton.addActionListener(e -> {
+            // TODO : action annuler (ex: fermer, revenir en arrière)
+        });
+
+        form.add(annulerButton);
+
+        // ── Assemblage global ────────────────────────────────────────────
+        JPanel body = new JPanel(new BorderLayout());
+        body.setBackground(Color.WHITE);
+        body.add(header, BorderLayout.NORTH);
+        body.add(form,   BorderLayout.CENTER);
+
+        // ScrollPane invisible
+        JScrollPane scroll = new JScrollPane(body);
+        scroll.setBorder(null);
+        scroll.setBackground(Color.WHITE);
+        scroll.getViewport().setBackground(Color.WHITE);
+        scroll.getVerticalScrollBar().setPreferredSize(new Dimension(0, 0));
+        scroll.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 0));
+        scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scroll.getVerticalScrollBar().setUnitIncrement(16);
+
+        panelPrincipal.add(scroll, BorderLayout.CENTER);
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    //  Helpers
+    // ════════════════════════════════════════════════════════════════════════
+
+    private JPasswordField addPasswordField(JPanel parent, String labelTxt, String placeholder) {
+
+        // Label avec astérisque
+        JPanel labelRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        labelRow.setBackground(Color.WHITE);
+        JLabel star = new JLabel("* ");
+        star.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        star.setForeground(new Color(220, 53, 69));
+        JLabel lbl = new JLabel(labelTxt);
+        lbl.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        lbl.setForeground(new Color(50, 50, 50));
+        labelRow.add(star);
+        labelRow.add(lbl);
+
+        parent.add(labelRow);
+        parent.add(Box.createVerticalStrut(7));
+
+        // Wrapper avec bordure arrondie
+        JPanel wrapper = new JPanel(new BorderLayout());
+        wrapper.setBackground(new Color(250, 250, 250));
+        wrapper.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
+        wrapper.setPreferredSize(new Dimension(420, 50));
+        wrapper.setBorder(BorderFactory.createCompoundBorder(
+                new MatriculeForm.RoundedBorder(new Color(215, 215, 215), 10, 1),
+                new EmptyBorder(2, 14, 2, 6)
+        ));
+
+        // Champ mot de passe
+        JPasswordField pf = new JPasswordField();
+        pf.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        pf.setForeground(new Color(170, 170, 170));
+        pf.setBackground(new Color(250, 250, 250));
+        pf.setBorder(null);
+        pf.setEchoChar((char) 0);   // placeholder visible en clair
+        pf.setText(placeholder);
+
+        // Bouton œil
+        JButton eye = new JButton("⊘");
+        eye.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+        eye.setForeground(new Color(180, 180, 180));
+        eye.setBackground(new Color(250, 250, 250));
+        eye.setBorderPainted(false);
+        eye.setFocusPainted(false);
+        eye.setContentAreaFilled(false);
+        eye.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        eye.setPreferredSize(new Dimension(38, 38));
+
+        final boolean[] visible = {false};
+
+        eye.addActionListener(ev -> {
+            visible[0] = !visible[0];
+            if (String.valueOf(pf.getPassword()).equals(placeholder)) return;
+            pf.setEchoChar(visible[0] ? (char) 0 : '●');
+            eye.setText(visible[0] ? "◎" : "⊘");
+        });
+
+        pf.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (String.valueOf(pf.getPassword()).equals(placeholder)) {
+                    pf.setText("");
+                    pf.setForeground(new Color(20, 20, 20));
+                    pf.setBackground(Color.WHITE);
+                    wrapper.setBackground(Color.WHITE);
+                    eye.setBackground(Color.WHITE);
+                    pf.setEchoChar(visible[0] ? (char) 0 : '●');
+                }
+                wrapper.setBorder(BorderFactory.createCompoundBorder(
+                        new MatriculeForm.RoundedBorder(new Color(33, 119, 240), 10, 1),
+                        new EmptyBorder(2, 14, 2, 6)
+                ));
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (pf.getPassword().length == 0) {
+                    pf.setForeground(new Color(170, 170, 170));
+                    pf.setBackground(new Color(250, 250, 250));
+                    wrapper.setBackground(new Color(250, 250, 250));
+                    eye.setBackground(new Color(250, 250, 250));
+                    pf.setEchoChar((char) 0);
+                    pf.setText(placeholder);
+                }
+                wrapper.setBorder(BorderFactory.createCompoundBorder(
+                        new MatriculeForm.RoundedBorder(new Color(215, 215, 215), 10, 1),
+                        new EmptyBorder(2, 14, 2, 6)
+                ));
+            }
+        });
+
+        wrapper.add(pf, BorderLayout.CENTER);
+        wrapper.add(eye, BorderLayout.EAST);
+
+        parent.add(wrapper);
+        parent.add(Box.createVerticalStrut(18));
+
+        return pf;
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    //  Accesseurs
+    // ════════════════════════════════════════════════════════════════════════
+
+    public JPanel getPanelPrincipal() { return panelPrincipal; }
+
+    public String getAncienPassword() {
+        String v = String.valueOf(ancienPasswordField.getPassword());
+        return v.equals("Entrez votre ancien mot de passe") ? "" : v;
+    }
+
+    public String getNouveauPassword() {
+        String v = String.valueOf(nouveauPasswordField.getPassword());
+        return v.equals("Entrez votre nouveau mot de passe") ? "" : v;
+    }
+
+    public String getConfirmPassword() {
+        String v = String.valueOf(confirmPasswordField.getPassword());
+        return v.equals("Confirmez votre nouveau mot de passe") ? "" : v;
+    }
+
+    public JButton getConfirmerButton() { return confirmerButton; }
+
+    public void addConfirmerListener(ActionListener l) {
+        confirmerButton.addActionListener(l);
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    //  Main de test
+    // ════════════════════════════════════════════════════════════════════════
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); }
+            catch (Exception ignored) {}
+
+            JFrame frame = new JFrame("Test – Changement de mot de passe");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setResizable(false);
+            frame.setContentPane(new ChangePasswordForm().getPanelPrincipal());
+            frame.pack();
+            frame.setLocationRelativeTo(null);
+            frame.setVisible(true);
+        });
+    }
+}

@@ -4,6 +4,7 @@ import models.Administrateur;
 import models.AgentAdministratif;
 import models.Usager;
 import models.User;
+import models.enums.Role;
 import views.NavItem;
 import views.SidebarPanel;
 import views.enums.ViewName;
@@ -23,14 +24,14 @@ public class SidebarController {
     public void configureFor(User user) {
         List<NavItem> items = new ArrayList<>();
 
-        if (user instanceof Administrateur) {
+        if (user.getRole() == Role.ADMINISTRATEUR) {
 
             items.add(new NavItem("Dashboard", () -> navigation.goTo(ViewName.ADMIN_DASHBOARD)));
             items.add(new NavItem("Gestion de comptes", () -> navigation.goTo(ViewName.ACCOUNT_MANAGEMENT)));
 
-        } else if (user instanceof AgentAdministratif) {
+        } else if (user.getRole() == Role.AGENT_ADMINISTRATIF) {
 
-        } else if (user instanceof Usager) {
+        } else if (user.getRole() == Role.USAGER) {
 
         }
 

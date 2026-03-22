@@ -12,26 +12,36 @@ package utilities;
 import models.*;
 
 public class SessionManager {
-    
-    private static User currentUser;
+    private static SessionManager instance;
+    private int userId;
+    private String userEmail;
+    private String userRole;
+
+    // Constructeur privé pour empêcher l'instanciation directe
     private SessionManager() {}
 
-    public static void setUser(User user) {
-        currentUser = user;
+    // Méthode pour récupérer l'unique instance
+    public static SessionManager getInstance() {
+        if (instance == null) {
+            instance = new SessionManager();
+        }
+        return instance;
     }
 
-    // Pour récupérer l'utilisateur n'importe où (ex: SessionManager.getUser().getNom())
-    public static User getUser() {
-        return currentUser;
+    // Méthodes pour initialiser et récupérer les infos
+    public void createSession(int id, String email, String role) {
+        this.userId = id;
+        this.userEmail = email;
+        this.userRole = role;
     }
 
-    // Pour vérifier si quelqu'un est connecté avant d'ouvrir une fenêtre
-    public static boolean isLoggedIn() {
-        return currentUser != null;
+    public void closeSession() {
+        this.userId = 0;
+        this.userEmail = null;
+        this.userRole = null;
     }
 
-    // Pour la déconnexion
-    public static void logout() {
-        currentUser = null;
-    }
+    // Getters
+    public int getUserId() { return userId; }
+    public String getUserRole() { return userRole; }
 }

@@ -8,6 +8,7 @@ import java.sql.*;
 import database.*;
 import models.enums.Role;
 import utilities.*;
+import java.util.*;
 
 /**
  *
@@ -76,6 +77,47 @@ public class UserDAO {
         e.printStackTrace();
         return false;
     }
+}
+
+
+    public List<UserSummaryDTO> getAllUsersWithDemandes() {
+    List<UserSummaryDTO> users = new ArrayList<>();
+    
+    // Requête SQL mise à jour : on sélectionne 'nom' et 'prenom' séparément
+    String sql = "SELECT u.matricule, u.nom, u.prenom, u.filiere, u.niveau_etude, " +
+                 "COUNT(d.id) AS total_demandes, " +
+                 "(SELECT status FROM demandes d2 WHERE d2.user_id = u.id " +
+                 " ORDER BY d2.date_creation DESC LIMIT 1) AS dernier_statut " +
+                 "FROM users u " +
+                 "LEFT JOIN demandes d ON u.id = d.user_id " +
+                 "GROUP BY u.id, u.matricule, u.nom, u.prenom, u.filiere, u.niveau_etude";
+
+    try (Connection conn = DatabaseConnection.getInstance().getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
+
+        while (rs.next()) {
+            // On récupère les valeurs individuelles
+            String lastName = rs.getString("nom");
+            String firstName = rs.getString("prenom");
+            
+            // Création de l'objet avec les nouveaux champs firstName et lastName
+            UserSummaryDTO user = new UserSummaryDTO(
+                rs.getString("matricule"),
+                firstName,
+                lastName,
+                rs.getString("filiere"),
+                rs.getString("niveau_etude"),
+                rs.getInt("total_demandes"),
+                rs.getString("dernier_statut")
+            );
+            users.add(user);
+        }
+    } catch (SQLException e) {
+        // Dans un environnement pro, il serait mieux d'utiliser un Logger
+        e.printStackTrace();
+    }
+    return users;
 }
 }
 

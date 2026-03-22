@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import database.*;
 import models.*;
 import models.enums.DemandStatus;
+import models.enums.AdministrativeActType;
 import utilities.*;
 import java.util.List;
 
@@ -116,4 +117,34 @@ public class DemandDAO extends BaseDAO<Demand> {
         }
         
     }
+
+    public List<Demand> getDemandesByUserId(int userId) {
+    List<Demand> liste = new ArrayList<>();
+    String sql = "SELECT * FROM demandes WHERE user_id = ?";
+
+    try (Connection conn = DatabaseConnection.getInstance().getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        
+        pstmt.setInt(1, userId);
+        ResultSet rs = pstmt.executeQuery();
+
+        while (rs.next()) {
+            Demand d = new Demand();
+            d.setId(rs.getInt("id"));
+            d.setUsagerId(rs.getInt("user_id"));
+            d.setDemandNumber(rs.getString("numero_demande"));
+            d.setStatus(rs.getString("statut"));
+            AdministrativeActType type = AdministrativeActType.valueOf(rs.getString("type_act"));
+            d.setTypeAct(type);
+            Timestamp ts = rs.getTimestamp("date_creation");
+            if (ts != null) {
+                d.setCreationDate(ts.toLocalDateTime()); 
+            }
+            liste.add(d);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return liste;
+}
 }

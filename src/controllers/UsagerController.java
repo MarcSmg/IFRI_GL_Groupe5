@@ -8,6 +8,7 @@ import models.enums.DemandStatus;
         
 import models.*;
 import dao.*;
+import java.util.*;
 
 /**
  *
@@ -45,5 +46,12 @@ public class UsagerController {
         }
               
         
+    }
+
+    public List<Demand> chargerDemandesUtilisateur(int userId) {
+        // Logique métier si nécessaire (ex: vérifier si l'ID est valide)
+        if (userId <= 0) return new ArrayList<>();
+        
+        return demandDAO.getDemandesByUserId(userId);
     }
 }

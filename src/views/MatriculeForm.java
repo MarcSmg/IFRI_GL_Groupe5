@@ -18,11 +18,8 @@ public class MatriculeForm {
         initComponents();
     }
 
-    // ════════════════════════════════════════════════════════════════════════
     //  Composants réutilisables (partagés entre les 3 formulaires)
-    // ════════════════════════════════════════════════════════════════════════
 
-    /** Bordure arrondie dessinée manuellement (antialiasing). */
     public static class RoundedBorder extends AbstractBorder {
         private final Color color;
         private final int radius;
@@ -103,16 +100,14 @@ public class MatriculeForm {
         }
     }
 
-    // ════════════════════════════════════════════════════════════════════════
     //  Construction du formulaire
-    // ════════════════════════════════════════════════════════════════════════
 
     private void initComponents() {
         panelPrincipal = new JPanel(new BorderLayout());
-        panelPrincipal.setBackground(Color.WHITE);
-        panelPrincipal.setPreferredSize(new Dimension(620, 380));
-        panelPrincipal.setBorder(new EmptyBorder(52, 72, 44, 72));
-
+        panelPrincipal.setBackground(Color.WHITE); 
+        panelPrincipal.setBorder(new EmptyBorder(30, 50, 30, 50));
+        
+        
         // ── Barre supérieure : lien connexion à droite ───────────────────
         JPanel topBar = new JPanel(new BorderLayout());
         topBar.setBackground(Color.WHITE);
@@ -128,6 +123,12 @@ public class MatriculeForm {
             }
             @Override public void mouseExited(MouseEvent e) {
                 connexionLink.setText("Déjà un compte ? Se connecter →");
+            }
+            
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                NavigationManager.closeCurrent(panelPrincipal);
+                NavigationManager.showConnexion();
             }
         });
 
@@ -190,7 +191,8 @@ public class MatriculeForm {
         nextButton.setForeground(Color.WHITE);
         nextButton.setPreferredSize(new Dimension(150, 48));
         nextButton.addActionListener(e -> {
-            // TODO : ajouter ici la logique de traitement du matricule
+            NavigationManager.closeCurrent(panelPrincipal); // Ferme le matricule
+            NavigationManager.showInscription("KAGBAHINTO", "Héloise", "Génie Logiciel", "L3");
         });
 
         JPanel bottomBar = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
@@ -221,7 +223,6 @@ public class MatriculeForm {
         ));
     }
 
-    // ── Accesseurs ───────────────────────────────────────────────────────────
 
     public JPanel getPanelPrincipal() { return panelPrincipal; }
 
@@ -236,19 +237,5 @@ public class MatriculeForm {
 
     public void addConnexionLinkListener(MouseAdapter a) { connexionLink.addMouseListener(a); }
 
-    // ── Main de test ─────────────────────────────────────────────────────────
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); }
-            catch (Exception ignored) {}
-            JFrame frame = new JFrame("Test – Numéro Matricule");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setResizable(false);
-            frame.setContentPane(new MatriculeForm().getPanelPrincipal());
-            frame.pack();
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
-        });
-    }
 }

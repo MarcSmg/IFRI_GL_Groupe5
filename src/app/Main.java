@@ -1,11 +1,23 @@
 package app;
 import database.*;
+import views.*;
+import javax.swing.*;
 public class Main {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+        
+        try { 
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); 
+        } catch (Exception e) { 
+            e.printStackTrace(); 
+        }
         DatabaseInitializer.prepareDatabase();
+        HomePage home = new HomePage();
+        JFrame frame = new JFrame("Gestion des actes administratifs");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setContentPane(home.getPanelPrincipal);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+        
 
     }
 }

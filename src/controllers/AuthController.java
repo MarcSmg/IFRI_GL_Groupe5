@@ -30,12 +30,36 @@ public class AuthController {
             return AuthResult.WRONG_PASSWORD;
         }
 
-        SessionManager.setUser(user);
 
         if (user.getIsTemporary()) {
             return AuthResult.MUST_CHANGE_PASSWORD;
         }
 
+        
+
+                SessionManager.getInstance().createSession(
+                    user.getId(), 
+                    user.getEmail(), 
+                    user.getRole().name()
+                );
+                System.out.println("Session créée pour l'ID : " + user.getId());
+                SessionManager.getInstance().createSession(
+                user.getId(), 
+                user.getEmail(), 
+                user.getRole().name()
+            );
         return AuthResult.SUCCESS;
+    }
+
+   public User getAuthenticatedUser(String identifier) {
+        return userDAO.findByLoginOrEmail(identifier);
+    }
+   
+   public String getUserRole(String identifier) {
+        User user = userDAO.findByLoginOrEmail(identifier);
+        if (user != null && user.getRole() != null) {
+            return user.getRole().name(); // Retourne "ADMIN", "AGENT" ou "ETUDIANT"
+        }
+        return "GUEST"; // Rôle par défaut si rien n'est trouvé
     }
 }

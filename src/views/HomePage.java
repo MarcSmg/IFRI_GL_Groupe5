@@ -81,9 +81,7 @@ public class HomePage extends JFrame {
         add(buildScrollableBody(), BorderLayout.CENTER);
     }
 
-    // ════════════════════════════════════════════════════════════
-    //  HEADER
-    // ════════════════════════════════════════════════════════════
+
     private JPanel buildHeader() {
         JPanel wrapper = new JPanel(new BorderLayout());
         wrapper.setBackground(HEADER_BG);
@@ -261,9 +259,6 @@ public class HomePage extends JFrame {
         return p;
     }
 
-    // ════════════════════════════════════════════════════════════
-    //  SCROLLABLE BODY
-    // ════════════════════════════════════════════════════════════
     private JScrollPane buildScrollableBody() {
         JPanel body = new JPanel();
         body.setLayout(new BoxLayout(body, BoxLayout.Y_AXIS));
@@ -282,9 +277,7 @@ public class HomePage extends JFrame {
         return sp;
     }
 
-    // ════════════════════════════════════════════════════════════
-    //  HERO CARD — dark blue background, white text
-    // ════════════════════════════════════════════════════════════
+
     private JPanel buildHeroCard() {
         JPanel card = new JPanel(new GridBagLayout()) {
             @Override protected void paintComponent(Graphics g) {
@@ -339,6 +332,11 @@ public class HomePage extends JFrame {
         subtitle.setHorizontalAlignment(SwingConstants.CENTER);
 
         JButton loginBtn = buildWhiteButton("Se connecter");
+        loginBtn.addActionListener(e -> {
+        ConnexionForm form = new ConnexionForm();
+        NavigationManager.showConnexion();
+        
+    });
         loginBtn.setAlignmentX(CENTER_ALIGNMENT);
 
         inner.add(title);
@@ -470,9 +468,6 @@ public class HomePage extends JFrame {
         return btn;
     }
 
-    // ════════════════════════════════════════════════════════════
-    //  ROUNDED BORDER HELPER
-    // ════════════════════════════════════════════════════════════
     static class RoundedBorder extends AbstractBorder {
         private final Color color;
         private final int   thickness, radius;
@@ -492,9 +487,6 @@ public class HomePage extends JFrame {
         }
     }
 
-    // ════════════════════════════════════════════════════════════
-    //  MAIN
-    // ════════════════════════════════════════════════════════════
     public static void main(String[] args) {
         try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); }
         catch (Exception ignored) {}

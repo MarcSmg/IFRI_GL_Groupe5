@@ -26,6 +26,9 @@ public class AdminController {
     private UserDAO userDAO;
       private AgentsPermissionsDAO permissionsDAO;
 
+      public Administrateur(){
+          
+      }
     public AdminController(Administrateur admin) {
         this.adminConnecte = admin;
         this.agentDAO = new AgentAdministratifDAO();
@@ -113,5 +116,9 @@ public class AdminController {
     }
     public boolean donnerDroitSignature(int agentId, AdministrativeActType type) {
         return permissionsDAO.addPermission(agentId, type, "SIGNATAIRE");
+    }
+
+    public List<UserSummaryDTO> chargerListeUtilisateurs() {
+        return userDAO.getAllUsersWithDemandes();
     }
 }
