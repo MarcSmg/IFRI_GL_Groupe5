@@ -11,7 +11,7 @@ package utilities;
 public class StringUtilities {
     public static String formaterNumero(String prefix, int nId){
         int year = java.time.Year.now().getValue();
-        String format = String.format("%s%d-%04d", prefix, year, Id);
+        String format = String.format("%s%d-%04d", prefix, year, nId);
         return format;
         
     }

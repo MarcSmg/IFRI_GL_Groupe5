@@ -2,6 +2,7 @@ package dao;
 
 import models.AdministrativeAct;
 import models.AgentAdministratif;
+import models.enums.AdministrativeActType;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,7 +25,7 @@ public class AdministrativeActDAO extends BaseDAO<AdministrativeAct> {
             while (resultSet.next()) {
                 AdministrativeAct administrativeAct = new AdministrativeAct();
                 administrativeAct.setId(resultSet.getInt("id"));
-                administrativeAct.setType(resultSet.getString("type"));
+                administrativeAct.setType(AdministrativeActType.valueOf(resultSet.getString("type")));
                 administrativeAct.setContent(resultSet.getString("contenu"));
                 administrativeAct.setSignatoryID(resultSet.getInt("id_signataire"));
                 administrativeAct.setIsSigned(resultSet.getBoolean("est_signe"));
@@ -47,7 +48,7 @@ public class AdministrativeActDAO extends BaseDAO<AdministrativeAct> {
 
         try (PreparedStatement pstmt = getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            pstmt.setString(1, act.getType());
+            pstmt.setString(1, act.getType().getLabel());
             pstmt.setString(2, act.getContent());
             pstmt.setInt(3, act.getSignatoryID());
             pstmt.setBoolean(4, act.getIsSigned());
@@ -72,7 +73,7 @@ public class AdministrativeActDAO extends BaseDAO<AdministrativeAct> {
                 ";";
         try (PreparedStatement pstmt = getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            pstmt.setString(1, act.getType());
+            pstmt.setString(1, act.getType().getLabel());
             pstmt.setString(2, act.getContent());
             pstmt.setInt(3, act.getSignatoryID());
             pstmt.setBoolean(4, act.getIsSigned());
@@ -85,6 +86,26 @@ public class AdministrativeActDAO extends BaseDAO<AdministrativeAct> {
             System.err.println("!! Une erreur est survenue lors d'une modification de données : " + e.getMessage());
         }
         return 0;
+    }
+
+    public int updateActUrl(AdministrativeAct act) {
+
+        String sql = "UPDATE actes_administratifs " +
+                "SET act_url = ? " +
+                "WHERE id = ?";
+
+        try (PreparedStatement pstmt = getConnection().prepareStatement(sql)) {
+
+            pstmt.setString(1, act.getActUrl());
+            pstmt.setInt(2, act.getId());
+
+            return pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la mise à jour de act_url : " + e.getMessage());
+        }
+
+        return -1;
     }
 
 }

@@ -212,7 +212,7 @@ public class ConnexionForm {
                             "Première connexion : veuillez modifier votre mot de passe.",
                             "Sécurité", JOptionPane.INFORMATION_MESSAGE);
                     NavigationManager.closeCurrent(panelPrincipal);
-                    NavigationManager.showChangePassword();
+                    NavigationManager.showChangePassword(user.getId());
                 }
                 default -> JOptionPane.showMessageDialog(panelPrincipal,
                         "Erreur inattendue : " + messageAuth, "Erreur Système", JOptionPane.ERROR_MESSAGE);

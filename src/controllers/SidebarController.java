@@ -1,8 +1,5 @@
 package controllers;
 
-import models.Administrateur;
-import models.AgentAdministratif;
-import models.Usager;
 import models.User;
 import models.enums.Role;
 import views.NavItem;
@@ -31,7 +28,11 @@ public class SidebarController {
 
         } else if (user.getRole() == Role.AGENT_ADMINISTRATIF) {
 
+            items.add(new NavItem("Gestion des demandes", () -> navigation.goTo(ViewName.DEMANDS_MANAGEMENT)));
+
         } else if (user.getRole() == Role.USAGER) {
+
+            items.add(new NavItem("Dashboard", () -> navigation.goTo(ViewName.USER_DASHBOARD)));
 
         }
 

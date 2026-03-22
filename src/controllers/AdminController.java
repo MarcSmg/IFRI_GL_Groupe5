@@ -26,7 +26,7 @@ public class AdminController {
     private UserDAO userDAO;
       private AgentsPermissionsDAO permissionsDAO;
 
-      
+      public AdminController() {}
     public AdminController(Administrateur admin) {
         this.adminConnecte = admin;
         this.agentDAO = new AgentAdministratifDAO();

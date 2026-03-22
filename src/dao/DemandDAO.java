@@ -1,12 +1,13 @@
 package dao;
 
 import models.Demand;
+import models.enums.DemandStatus;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import database.*;
 import models.*;
-import models.enums.DemandStatus;
 import models.enums.AdministrativeActType;
 import utilities.*;
 import java.util.List;
@@ -23,8 +24,8 @@ public class DemandDAO extends BaseDAO<Demand> {
                 Demand demand = new Demand();
                 demand.setId(resultSet.getInt("id"));
                 demand.setDemandNumber(resultSet.getString("numero_demande"));
-                demand.setStatus(resultSet.getString("statut"));
-                demand.setCreationDate(resultSet.getString("date_creation)"));
+                demand.setStatus(DemandStatus.valueOf(resultSet.getString("statut")));
+                demand.setCreationDate(resultSet.getObject("date_creation", LocalDateTime.class));
 
                 demandsList.add(demand);
             }
@@ -59,22 +60,39 @@ public class DemandDAO extends BaseDAO<Demand> {
     }
 
     public int update(Demand demand) {
-        String sql = "UPDATE " + tableName +
-                "SET statut = ?" +
-                "WHERE id = ?" +
-                ";";
 
-        try (PreparedStatement pstmt = getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        String sql = "UPDATE " + tableName + " SET statut = ? WHERE id = ?";
 
-            pstmt.setString(1, demand.getDemandNumber());
-            pstmt.setString(2, demand.getStatus().name());
+        try (PreparedStatement pstmt = getConnection().prepareStatement(sql)) {
+
+            pstmt.setString(1, demand.getStatus().name());
+            pstmt.setInt(2, demand.getId());
 
             return pstmt.executeUpdate();
 
         } catch (SQLException e) {
-            System.err.println("!! Une erreur est survenue lors d'une insertion de données : " + e.getMessage());
+            System.err.println("Erreur lors de la mise à jour : " + e.getMessage());
         }
+
         return -1;
+    }
+
+    public boolean updateStatus(int id, String status) {
+
+        String sql = "UPDATE " + tableName + " SET statut = ? WHERE id = ?";
+
+        try (PreparedStatement pstmt = getConnection().prepareStatement(sql)) {
+
+            pstmt.setString(1, status);
+            pstmt.setInt(2, id);
+
+            return pstmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la mise à jour du statut : " + e.getMessage());
+        }
+
+        return false;
     }
     
     public String registerEtGenererRef(Demand d) {
@@ -108,14 +126,11 @@ public class DemandDAO extends BaseDAO<Demand> {
                 String statut = rs.getString("statut");
                 return DemandStatus.valueOf(statut);
             }
-            
-            
-            
+
         }catch(Exception e ){
             System.err.println("Erreur lors de la lecture du statut de la demande" + e.getMessage());
-            return null;
         }
-        
+        return null;
     }
 
     public List<Demand> getDemandesByUserId(int userId) {

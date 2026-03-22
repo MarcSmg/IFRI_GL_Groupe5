@@ -14,7 +14,7 @@ public class Main {
         HomePage home = new HomePage();
         JFrame frame = new JFrame("Gestion des actes administratifs");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setContentPane(home.getPanelPrincipal);
+        frame.setContentPane(home.getContentPane());
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         
