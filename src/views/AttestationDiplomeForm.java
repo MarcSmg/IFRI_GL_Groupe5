@@ -24,7 +24,7 @@ public class AttestationDiplomeForm extends BaseDocumentForm {
     protected String getFormTitle()    { return "Attestation de diplôme"; }
 
     @Override
-    protected String getFormSubtitle() { return "Document provisoire en attente de l'émission du diplôme officiel."; }
+    protected String getFormSubtitle() { return ""; }
 
     @Override
     protected void buildFormContent(JPanel form) {

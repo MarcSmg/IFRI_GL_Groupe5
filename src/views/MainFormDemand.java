@@ -31,7 +31,8 @@ public class MainFormDemand {
     // ════════════════════════════════════════════════════════════════════════
     //  Composants
     // ════════════════════════════════════════════════════════════════════════
-    private JFrame             frame;
+    private JPanel panelPrincipal;
+    
     private JComboBox<AdministrativeActType> typeCombo;
     private JPanel             dynamicPanel;
     private JLabel             emptyStateLabel;
@@ -44,17 +45,15 @@ public class MainFormDemand {
     }
 
     private void buildFrame() {
-        frame = new JFrame("Demande de documents académiques");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(620, 700);
-        frame.setMinimumSize(new Dimension(500, 500));
-        frame.setLocationRelativeTo(null);
-        frame.getContentPane().setBackground(C_BG);
-        frame.setLayout(new BorderLayout());
+        panelPrincipal = new JPanel(new BorderLayout());
+        panelPrincipal.add(buildTopBar(),   BorderLayout.NORTH);
+        panelPrincipal.add(buildMainArea(), BorderLayout.CENTER);
 
-        frame.add(buildTopBar(),    BorderLayout.NORTH);
-        frame.add(buildMainArea(),  BorderLayout.CENTER);
+        panelPrincipal.add(buildTopBar(),    BorderLayout.NORTH);
+        panelPrincipal.add(buildMainArea(),  BorderLayout.CENTER);
     }
+
+    public JPanel getPanelPrincipal() { return panelPrincipal; }
 
     // ── Barre supérieure ─────────────────────────────────────────────────────
 
@@ -217,11 +216,9 @@ public class MainFormDemand {
      */
     private BaseDocumentForm createForm(AdministrativeActType type) {
         return switch (type) {
-            case ATTESTATION_INSCRIPTION -> new AttestationInscriptionForm();
             case CERTIFICAT_SCOLARITE    -> new CertificatScolariteForm();
             case RELEVE_NOTES            -> new ReleveNotesForm();
             case ATTESTATION_REUSSITE    -> new AttestationReussiteForm();
-            case CERTIFICAT_ADMISSION    -> new CertificatAdmissionForm();
             case ATTESTATION_DIPLOME     -> new AttestationDiplomeForm();
         };
     }
@@ -229,13 +226,4 @@ public class MainFormDemand {
     // ════════════════════════════════════════════════════════════════════════
     //  SEULE méthode main de tout le projet
     // ════════════════════════════════════════════════════════════════════════
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); }
-            catch (Exception ignored) {}
-
-            MainFormDemand app = new MainFormDemand();
-            app.frame.setVisible(true);
-        });
-    }
 }

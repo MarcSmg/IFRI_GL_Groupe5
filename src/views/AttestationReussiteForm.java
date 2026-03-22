@@ -13,7 +13,6 @@ public class AttestationReussiteForm extends BaseDocumentForm {
     private JComboBox<String> niveauCombo;
     private JTextField        filiereField;
     private JTextField        mentionField;
-    private JTextField        organismeDestField;
 
     public AttestationReussiteForm() {
         init();
@@ -54,9 +53,6 @@ public class AttestationReussiteForm extends BaseDocumentForm {
 
         addSectionSeparator(form, "Destination");
 
-        organismeDestField = addOptionalTextField(form,
-                "Organisme destinataire (optionnel)",
-                "Ex : Employeur, Ambassade, Université…");
     }
 
     // ── Accesseurs ───────────────────────────────────────────────────────────
@@ -66,5 +62,4 @@ public class AttestationReussiteForm extends BaseDocumentForm {
     public String getNiveau()          { return (String) niveauCombo.getSelectedItem(); }
     public String getFiliere()         { return filiereField.getText().trim(); }
     public String getMention()         { return mentionField.getText().trim(); }
-    public String getOrganismeDest()   { return organismeDestField.getText().trim(); }
 }

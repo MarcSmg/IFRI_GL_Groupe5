@@ -11,8 +11,6 @@ public class CertificatScolariteForm extends BaseDocumentForm {
     private JTextField        anneeAcademiqueField;
     private JComboBox<String> niveauCombo;
     private JTextField        filiereField;
-    private JTextField        organismeDestField;
-    private JComboBox<String> nombreCopiesCombo;
 
     public CertificatScolariteForm() {
         init();
@@ -22,7 +20,7 @@ public class CertificatScolariteForm extends BaseDocumentForm {
     protected String getFormTitle()    { return "Certificat de scolarité"; }
 
     @Override
-    protected String getFormSubtitle() { return "Précisez l'année et le niveau pour la génération du certificat."; }
+    protected String getFormSubtitle() { return ""; }
 
     @Override
     protected void buildFormContent(JPanel form) {
@@ -43,13 +41,9 @@ public class CertificatScolariteForm extends BaseDocumentForm {
 
         addSectionSeparator(form, "Options du document");
 
-        organismeDestField = addOptionalTextField(form,
-                "Organisme destinataire (optionnel)",
-                "Ex : CNSS, Mairie, Administration…");
 
-        nombreCopiesCombo = addComboBox(form,
-                "Nombre de copies demandées",
-                new String[]{"1 copie", "2 copies", "3 copies", "5 copies"});
+
+        
     }
 
     // ── Accesseurs ───────────────────────────────────────────────────────────
@@ -57,6 +51,4 @@ public class CertificatScolariteForm extends BaseDocumentForm {
     public String getAnneeAcademique() { return anneeAcademiqueField.getText().trim(); }
     public String getNiveau()          { return (String) niveauCombo.getSelectedItem(); }
     public String getFiliere()         { return filiereField.getText().trim(); }
-    public String getOrganismeDest()   { return organismeDestField.getText().trim(); }
-    public String getNombreCopies()    { return (String) nombreCopiesCombo.getSelectedItem(); }
 }

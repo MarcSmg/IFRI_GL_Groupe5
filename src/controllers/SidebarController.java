@@ -32,6 +32,7 @@ public class SidebarController {
         } else if (user.getRole() == Role.AGENT_ADMINISTRATIF) {
 
         } else if (user.getRole() == Role.USAGER) {
+            items.add(new NavItem("Vos demandes", () -> navigation.goTo(ViewName.USER_DASHBOARD)));
 
         }
 

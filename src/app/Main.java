@@ -12,11 +12,9 @@ public class Main {
         }
         DatabaseInitializer.prepareDatabase();
         HomePage home = new HomePage();
-        JFrame frame = new JFrame("Gestion des actes administratifs");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setContentPane(home.getPanelPrincipal);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
+        SwingUtilities.invokeLater(() -> home.setVisible(true));
+
+
         
 
     }

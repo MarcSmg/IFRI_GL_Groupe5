@@ -143,4 +143,60 @@ public class AuthController {
         }
     });
 }
+
+   public void controlerConnexion(ConnexionForm view) {
+    view.addConnexionListener(e -> {
+        String identifier = view.getEmail();
+        String password = view.getPassword();
+
+        // 1. Validation de base
+        if (identifier.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(view.getPanelPrincipal(), 
+                "Veuillez remplir tous les champs.", "Champs vides", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // 2. Recherche et Authentification via le DAO
+        UserDAO userDAO = new UserDAO();
+        User user = userDAO.findByLoginOrEmail(identifier);
+
+        if (user != null && user.getPassword().equals(password)) {
+            
+            // 3. Création de la Session
+            SessionManager.getInstance().createSession(
+                user.getId(), 
+                user.getEmail(), 
+                user.getRole().name()
+            );
+
+            // 4. Logique de redirection
+            if (user.getIsTemporary()) {
+                JOptionPane.showMessageDialog(view.getPanelPrincipal(), 
+                    "Première connexion : vous devez changer votre mot de passe.", 
+                    "Sécurité", JOptionPane.INFORMATION_MESSAGE);
+                
+                NavigationManager.closeCurrent(view.getPanelPrincipal());
+                NavigationManager.showChangePassword(user.getId()); 
+            } else {
+                NavigationManager.closeCurrent(view.getPanelPrincipal());
+                // creation du main 
+                MainFrame  mainFrame = new MainFrame();
+                SidebarPanel  sidebarPanel = new SidebarPanel();
+                NavigationController navigationController = new NavigationController(mainFrame);
+                SidebarController sidebarCtrl = new SidebarController(sidebarPanel, navigationController);
+                sidebarCtrl.configureFor(user);
+                JPanel contenuContainer = mainFrame.getContainer();
+                //
+                //contenuConteneur = 
+             
+                mainFrame.getRoot();
+            }
+            
+        } else {
+            // CAS : Échec (Utilisateur inconnu ou mauvais MDP)
+            JOptionPane.showMessageDialog(view.getPanelPrincipal(), 
+                "Email ou mot de passe incorrect.", "Erreur d'authentification", JOptionPane.ERROR_MESSAGE);
+        }
+    });
+}
 }

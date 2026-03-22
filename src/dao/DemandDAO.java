@@ -23,9 +23,12 @@ public class DemandDAO extends BaseDAO<Demand> {
                 Demand demand = new Demand();
                 demand.setId(resultSet.getInt("id"));
                 demand.setDemandNumber(resultSet.getString("numero_demande"));
-                demand.setStatus(resultSet.getString("statut"));
-                demand.setCreationDate(resultSet.getString("date_creation)"));
-
+                String statutStr = resultSet.getString("statut");
+                demand.setStatus(DemandStatus.valueOf(statutStr.toUpperCase())); 
+                java.sql.Timestamp ts = resultSet.getTimestamp("date_creation");
+                if (ts != null) {
+                    demand.setCreationDate(ts.toLocalDateTime());
+                }
                 demandsList.add(demand);
             }
         } catch (SQLException e) {
@@ -100,22 +103,26 @@ public class DemandDAO extends BaseDAO<Demand> {
     
     public DemandStatus seeStatus(int id){
         String sql = "SELECT statut FROM demandes WHERE id = ?";
+        String statut =  null;
         try(Connection conn = DatabaseConnection.getInstance().getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(sql)){
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
-            if(rs.next()){
-                String statut = rs.getString("statut");
-                return DemandStatus.valueOf(statut);
-            }
             
+            if(rs.next()){
+                 statut = rs.getString("statut");
+                
+            }
             
             
         }catch(Exception e ){
             System.err.println("Erreur lors de la lecture du statut de la demande" + e.getMessage());
             return null;
         }
-        
+        if (statut != null) {
+        return DemandStatus.valueOf(statut.toUpperCase());
+    }
+        return null;
     }
 
     public List<Demand> getDemandesByUserId(int userId) {

@@ -14,11 +14,11 @@ import java.util.*;
 public class UsagerDAO {
     private WhiteListDAO whiteListDAO;
 
-    
+    /*
     public void traiterVerificationMatricule(String matriculeStr) {
     try {
         int matricule = Integer.parseInt(matriculeStr);
-        Map<String, String> resultat = whiteListDAO.verifierMatricule(matricule);
+        //Map<String, String> resultat = whiteListDAO.verifierMatricule(matricule);
 
         if (resultat != null) {
             // Succès : On passe les infos à la Vue pour pré-remplir
@@ -31,7 +31,7 @@ public class UsagerDAO {
         // renvoyer erreru
         //vueInscription.afficherErreur("Le matricule doit être un nombre.");
     }
-}
+}*/
     
     
 }

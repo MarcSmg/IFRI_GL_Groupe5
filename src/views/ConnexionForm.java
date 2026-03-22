@@ -20,16 +20,11 @@ public class ConnexionForm {
 
     public ConnexionForm() {
         authController = new AuthController();
-        mainFrame = new MainFrame();
         initComponents();
+        authController.controlerConnexion(this);
     }
 
     private void initComponents() {
-
-        // ─────────────────────────────────────────────────────────────────
-        // panelPrincipal : conteneur neutre — PAS de setPreferredSize,
-        // PAS de setBorder. La taille vient de NavigationManager.setSize().
-        // ─────────────────────────────────────────────────────────────────
         panelPrincipal = new JPanel(new BorderLayout());
         panelPrincipal.setBackground(Color.WHITE);
 
@@ -170,58 +165,10 @@ public class ConnexionForm {
         // ── CLÉ : setMaximumSize uniquement ──
         connexionButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, 48));
         connexionButton.addActionListener(e -> {
-            String emailOrIdentifier = emailField.getText().trim();
-            char[] passwordChar = passwordField.getPassword();
-            String password = new String(passwordChar).trim();
-
-            if (emailOrIdentifier.isEmpty() || password.isEmpty()) {
-                JOptionPane.showMessageDialog(panelPrincipal,
-                        "Veuillez remplir tous les champs obligatoires.",
-                        "Champs vides", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-
-            String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
-            if (emailOrIdentifier.contains("@") && !emailOrIdentifier.matches(emailRegex)) {
-                JOptionPane.showMessageDialog(panelPrincipal,
-                        "Le format de l'adresse email est incorrect.",
-                        "Format invalide", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            var authStatus = authController.tryConnection(emailOrIdentifier, password);
-            User user = authController.getAuthenticatedUser(emailOrIdentifier);
-            String messageAuth = authStatus.name();
-
-            switch (messageAuth) {
-                case "SUCCESS" -> {
-                    if (user != null) NavigationManager.closeCurrent(panelPrincipal);
-                    JOptionPane.showMessageDialog(panelPrincipal, "Bienvenue ! Connexion réussie.");
-                }
-                case "NOT_FOUND" -> JOptionPane.showMessageDialog(panelPrincipal,
-                        "Identifiants incorrects.", "Utilisateur inconnu", JOptionPane.ERROR_MESSAGE);
-                case "WRONG_PASSWORD" -> {
-                    JOptionPane.showMessageDialog(panelPrincipal,
-                            "Mot de passe incorrect. Veuillez réessayer.",
-                            "Erreur de mot de passe", JOptionPane.WARNING_MESSAGE);
-                    passwordField.setText("");
-                    passwordField.requestFocus();
-                }
-                case "MUST_CHANGE_PASSWORD" -> {
-                    JOptionPane.showMessageDialog(panelPrincipal,
-                            "Première connexion : veuillez modifier votre mot de passe.",
-                            "Sécurité", JOptionPane.INFORMATION_MESSAGE);
-                    NavigationManager.closeCurrent(panelPrincipal);
-                    NavigationManager.showChangePassword();
-                }
-                default -> JOptionPane.showMessageDialog(panelPrincipal,
-                        "Erreur inattendue : " + messageAuth, "Erreur Système", JOptionPane.ERROR_MESSAGE);
-            }
         });
         form.add(connexionButton);
         form.add(Box.createVerticalStrut(20));
 
-        // ── Séparateur ───────────────────────────────────────────────────
         JSeparator sep = new JSeparator();
         sep.setMaximumSize(new Dimension(Integer.MAX_VALUE, 1));
         sep.setForeground(new Color(230, 230, 230));

@@ -17,6 +17,7 @@ import java.awt.geom.RoundRectangle2D;
 import java.util.List;
 import models.*;
 import models.enums.DemandStatus;
+import models.enums.AdministrativeActType;
 import controllers.*;
 
 
@@ -116,7 +117,21 @@ public class DashboardUsager {
         btnNouvelleDemande.setPreferredSize(new Dimension(190, 40));
         btnNouvelleDemande.addActionListener(e -> {
             // TODO : ouvrir le formulaire de nouvelle demande
+            MainFormDemand demandForm = new MainFormDemand();
+            JPanel panelForm = demandForm.getPanelPrincipal();
+            
+            JOptionPane.showConfirmDialog(
+        null,                             // Parent (null pour centrer sur l'écran)
+        panelForm,                        // Le composant à afficher
+        "Nouvelle Demande de Diplôme",    // Titre de la modal
+        JOptionPane.OK_CANCEL_OPTION,     // Boutons (OK et Annuler)
+        JOptionPane.PLAIN_MESSAGE         // Type d'icône (aucune ici car c'est un formulaire)
+    );
         });
+        
+        
+        
+
 
         actionButtons.add(btnVosDemandes);
         actionButtons.add(btnNouvelleDemande);
@@ -374,4 +389,59 @@ public class DashboardUsager {
     public JPanel getPanelPrincipal() { return panelPrincipal; }
 
 
+    
+    // ─────────────────────────────────────────────────────────────────────────
+    //  MÉTHODE MAIN POUR TESTER LE RENDU VISUEL
+    // ─────────────────────────────────────────────────────────────────────────
+    public static void main(String[] args) {
+        // 1. On applique un Look & Feel moderne (optionnel mais recommandé)
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) { e.printStackTrace(); }
+
+        // 2. Création d'un utilisateur fictif pour le test
+        User mockUser = new User();
+        mockUser.setId(1);
+        mockUser.setPrenom("Héloïse");
+        mockUser.setNom("Akohou");
+        mockUser.setEmail("heloise@example.com");
+        // Ajuste selon ton Enum Role (ex: Role.ETUDIANT ou Role.USER)
+        // mockUser.setRole(Role.USER); 
+
+        // 3. Création d'un contrôleur anonyme pour simuler les données
+        UsagerController mockController = new UsagerController() {
+            @Override
+            public java.util.List<Demand> chargerDemandesUtilisateur(int userId) {
+                // On crée une liste de demandes factices pour tester le design des cartes
+                java.util.List<Demand> testDemands = new java.util.ArrayList<>();
+                
+                Demand d1 = new Demand();
+                d1.setDemandNumber("2024-001");
+                d1.setTypeAct(AdministrativeActType.CERTIFICAT_SCOLARITE);
+                d1.setStatus(DemandStatus.PENDING);
+                
+                
+                
+                
+
+                testDemands.add(d1);
+             
+                
+                return testDemands;
+            }
+        };
+
+        // 4. Lancement dans l'EDT (Event Dispatch Thread) de Swing
+        SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame("Test Dashboard Usager");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            
+            DashboardUsager dashboard = new DashboardUsager(mockUser, mockController);
+            
+            frame.add(dashboard.getPanelPrincipal());
+            frame.pack();
+            frame.setLocationRelativeTo(null); // Centrer l'écran
+            frame.setVisible(true);
+        });
+    }
 }
