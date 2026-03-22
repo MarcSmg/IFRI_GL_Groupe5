@@ -1,25 +1,23 @@
 package models.enums;
 
+/**
+ * Enumération des types d'actes académiques disponibles.
+ */
 public enum AdministrativeActType {
-    
-    // Admission
-    ATTESTATION_INSCRIPTION("Attestation d'Inscription"),
-    CERTIFICAT_SCOLARITE("Certificat de Scolarité"),
-    
-    // Académique
-    RELEVE_NOTES("Relevé de Notes"),
-    ATTESTATION_REUSSITE("Attestation de Réussite"),
-    CERTIFICAT_ADMISSION("Certificat d'Admission"),
-    
-    ATTESTATION_DIPLOME("Attestation de Diplôme");
+
+    ATTESTATION_INSCRIPTION ("Attestation d'inscription"),
+    CERTIFICAT_SCOLARITE    ("Certificat de scolarité"),
+    RELEVE_NOTES            ("Relevé de notes"),
+    ATTESTATION_REUSSITE    ("Attestation de réussite"),
+    CERTIFICAT_ADMISSION    ("Certificat d'admission"),
+    ATTESTATION_DIPLOME     ("Attestation de diplôme");
 
     private final String label;
 
-    AdministrativeActType(String label) {
-        this.label = label;
-    }
+    AdministrativeActType(String label) { this.label = label; }
 
-    public String getLabel() {
-        return label;
-    }
+    public String getLabel() { return label; }
+
+    @Override
+    public String toString() { return label; }
 }

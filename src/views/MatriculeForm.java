@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.RoundRectangle2D;
 
+
 public class MatriculeForm {
 
     private JPanel panelPrincipal;
@@ -190,9 +191,12 @@ public class MatriculeForm {
         nextButton.setFont(new Font("Segoe UI", Font.BOLD, 14));
         nextButton.setForeground(Color.WHITE);
         nextButton.setPreferredSize(new Dimension(150, 48));
+        
+        
+        
+        
         nextButton.addActionListener(e -> {
-            NavigationManager.closeCurrent(panelPrincipal); // Ferme le matricule
-            NavigationManager.showInscription("KAGBAHINTO", "Héloise", "Génie Logiciel", "L3");
+            
         });
 
         JPanel bottomBar = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
@@ -216,6 +220,11 @@ public class MatriculeForm {
         panelPrincipal.add(bottomBar, BorderLayout.SOUTH);
     }
 
+    
+    public void addNextListener(ActionListener l) { 
+        nextButton.addActionListener(l); 
+    }
+    
     private void applyFieldBorder(JTextField f, Color borderColor) {
         f.setBorder(BorderFactory.createCompoundBorder(
                 new RoundedBorder(borderColor, 10, 1),
@@ -233,9 +242,12 @@ public class MatriculeForm {
 
     public JButton getNextButton() { return nextButton; }
 
-    public void addNextListener(ActionListener l) { nextButton.addActionListener(l); }
 
     public void addConnexionLinkListener(MouseAdapter a) { connexionLink.addMouseListener(a); }
 
+    
+    public void afficherMessage(String message, String titre, int type) {
+    JOptionPane.showMessageDialog(panelPrincipal, message, titre, type);
+}
 
 }

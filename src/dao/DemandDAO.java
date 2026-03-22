@@ -67,7 +67,7 @@ public class DemandDAO extends BaseDAO<Demand> {
         try (PreparedStatement pstmt = getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             pstmt.setString(1, demand.getDemandNumber());
-            pstmt.setString(2, demand.getStatus());
+            pstmt.setString(2, demand.getStatus().name());
 
             return pstmt.executeUpdate();
 
@@ -133,7 +133,7 @@ public class DemandDAO extends BaseDAO<Demand> {
             d.setId(rs.getInt("id"));
             d.setUsagerId(rs.getInt("user_id"));
             d.setDemandNumber(rs.getString("numero_demande"));
-            d.setStatus(rs.getString("statut"));
+            d.setStatus(DemandStatus.valueOf(rs.getString("statut")));
             AdministrativeActType type = AdministrativeActType.valueOf(rs.getString("type_act"));
             d.setTypeAct(type);
             Timestamp ts = rs.getTimestamp("date_creation");

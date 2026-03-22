@@ -8,14 +8,20 @@ import dao.*;
 import models.*;
 import org.mindrot.jbcrypt.BCrypt;
 import utilities.*;
-
+import views.*;
+import javax.swing.*;
 
 /**
  *
  * @author Héloïse
  */
 public class AuthController {
-    private final UserDAO userDAO = new UserDAO();
+    private final UserDAO userDAO;
+    private final WhiteListDAO whiteListDAO;
+    public AuthController() {
+        this.whiteListDAO = new WhiteListDAO();
+        this.userDAO = new UserDAO();
+    }
 
     // le authResult représente le resultat de la connexion 
     public AuthResult tryConnection(String identifiant, String mdpSaisi) {
@@ -62,4 +68,79 @@ public class AuthController {
         }
         return "GUEST"; // Rôle par défaut si rien n'est trouvé
     }
+
+   public void controlerMatriculeForm(MatriculeForm view) {
+        view.addNextListener(e -> {
+            String matricule = view.getMatricule();
+
+            // 1. Validation de saisie
+            if (matricule.isEmpty()) {
+                view.afficherMessage("Veuillez entrer votre matricule.", "Champ requis", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // 2. Vérification Liste Blanche
+            WhiteListEntry entry = whiteListDAO.checkWhitelist(matricule);
+            if (entry == null) {
+                view.afficherMessage("Matricule '" + matricule + "' non reconnu.", "Accès refusé", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // 3. Vérification si compte existant
+            if (whiteListDAO.isAlreadyRegistered(matricule)) {
+                view.afficherMessage("Un compte existe déjà. Redirection...", "Connexion", JOptionPane.INFORMATION_MESSAGE);
+                
+                NavigationManager.closeCurrent(view.getPanelPrincipal());
+                NavigationManager.showConnexion();
+            } else {
+                // 4. Succès -> Vers Inscription avec les données de la liste blanche
+                NavigationManager.closeCurrent(view.getPanelPrincipal());
+                NavigationManager.showInscription(
+                    entry.getLastName(), 
+                    entry.getFirstName(), 
+                    entry.getFieldOfStudy(), 
+                    entry.getStudyLevel()
+                );
+            }
+        });
+    }
+
+
+   public void controlerChangePasswordForm(ChangePasswordForm view, int userId) {
+    view.addConfirmerListener(e -> {
+        String nouveau = view.getNouveauPassword();
+        String confirmation = view.getConfirmPassword();
+
+        // 1. Vérification si les champs sont vides
+        if (nouveau.isEmpty() || confirmation.isEmpty()) {
+            JOptionPane.showMessageDialog(view.getPanelPrincipal(), 
+                "Veuillez remplir tous les champs.", "Erreur", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // 2. Vérification de la correspondance
+        if (!nouveau.equals(confirmation)) {
+            JOptionPane.showMessageDialog(view.getPanelPrincipal(), 
+                "Les nouveaux mots de passe ne correspondent pas.", "Erreur", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // 3. Mise à jour dans la base de données
+        UserDAO userDAO = new UserDAO();
+        boolean success = userDAO.changePassword(userId, nouveau);
+
+        if (success) {
+            JOptionPane.showMessageDialog(view.getPanelPrincipal(), 
+                "Mot de passe modifié avec succès ! Veuillez vous reconnecter.", 
+                "Succès", JOptionPane.INFORMATION_MESSAGE);
+
+            // 4. Redirection vers la page de connexion
+            NavigationManager.closeCurrent(view.getPanelPrincipal());
+            NavigationManager.showConnexion();
+        } else {
+            JOptionPane.showMessageDialog(view.getPanelPrincipal(), 
+                "Une erreur est survenue lors de la modification.", "Erreur", JOptionPane.ERROR_MESSAGE);
+        }
+    });
+}
 }

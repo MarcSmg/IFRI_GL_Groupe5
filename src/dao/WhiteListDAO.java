@@ -112,4 +112,48 @@ public class WhiteListDAO {
                 return false;
             }
 }
+
+    public WhiteListEntry checkWhitelist(String matricule) {
+        // Correction du nom de table pour être cohérent : white_list_usagers
+        String sql = "SELECT * FROM white_list_usagers WHERE matricule = ?";
+        
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setString(1, matricule); // Changement en setString
+            ResultSet rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                return new WhiteListEntry(
+                    rs.getString("matricule"), // Récupération en String direct
+                    rs.getString("lastName"),
+                    rs.getString("firstName"),
+                    rs.getDate("birth_date").toLocalDate(),
+                    rs.getString("place_birth"),
+                    rs.getString("fieldOfStudy"),
+                    rs.getString("study_level")
+                );
+            }
+        } catch (SQLException e) { 
+            e.printStackTrace(); 
+        }
+        return null; 
+    }
+    
+    public boolean isAlreadyRegistered(String matricule) {
+        String sql = "SELECT has_account FROM white_list_usagers WHERE matricule = ?";
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setString(1, matricule);
+            ResultSet rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                return rs.getBoolean("has_account");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

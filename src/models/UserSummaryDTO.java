@@ -25,7 +25,7 @@ public class UserSummaryDTO {
         this.filiere = filiere;
         this.studyLevel = studyLevel;
         this.nombreDemandes = nombreDemandes;
-        // Gestion automatique du message si aucune demande n'est trouvée en BD
+        // gestion automatique du message si aucune demande n'est trouvée en BD
         this.statutDerniereDemande = (statutDerniereDemande == null || statutDerniereDemande.isEmpty()) 
                                      ? "Aucune demande en cours" : statutDerniereDemande;
     }

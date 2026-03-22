@@ -4,8 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.border.EmptyBorder;
+import controllers.*;
+
 
 public class NavigationManager {
+    private static final AuthController authController = new AuthController();
 
     public static void showConnexion() {
         ConnexionForm form = new ConnexionForm();
@@ -14,6 +17,7 @@ public class NavigationManager {
 
     public static void showMatricule() {
         MatriculeForm form = new MatriculeForm();
+        authController.controlerMatriculeForm(form);
         configureAndShow(form.getPanelPrincipal(), "Identification", 480, 360);
     }
 
@@ -22,8 +26,9 @@ public class NavigationManager {
         configureAndShow(form.getPanelPrincipal(), "Inscription", 900, 620);
     }
 
-    public static void showChangePassword() {
+    public static void showChangePassword(int userId) {
         ChangePasswordForm form = new ChangePasswordForm();
+        authController.controlerChangePasswordForm(form, userId);
         configureAndShow(form.getPanelPrincipal(), "Changer le mot de passe", 460, 500);
     }
 
