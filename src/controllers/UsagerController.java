@@ -17,8 +17,8 @@ import java.util.*;
 public class UsagerController {
     
     private DemandDAO demandDAO;
-    public UsagerController(){
-        demandDAO = new DemandDAO();
+    public UsagerController(DemandDAO demandDAO){
+        this.demandDAO = demandDAO;
     }
     
     public boolean createDemand(AdministrativeActType actType){

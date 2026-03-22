@@ -11,7 +11,9 @@ import models.enums.Role;
  */
 public class Administrateur extends User {
     private String login;
-    public Administrateur() {};
+    public Administrateur() {
+        setRole(Role.ADMINISTRATEUR);
+    };
 
     public Administrateur(String login, String nom, String prenom, String email, Role role, String  motDePasseTemporaire){
      

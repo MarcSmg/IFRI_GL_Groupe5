@@ -170,6 +170,7 @@ public class ChangePasswordForm {
         eye.setPreferredSize(new Dimension(36, 36));
 
         final boolean[] visible = {false};
+
         eye.addActionListener(ev -> {
             visible[0] = !visible[0];
             if (String.valueOf(pf.getPassword()).equals(placeholder)) return;

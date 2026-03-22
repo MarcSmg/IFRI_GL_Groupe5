@@ -6,22 +6,22 @@ public class AppColors {
 
     private AppColors(){ }
 
-    public static final Color STRICT_WHITE_COLOR = new Color(0xFFFFFF);
-    public static final Color WHITE_COLOR = new Color(0xF5F8FA);
-    public static final Color LIGHT_GRAY_COLOR = new Color(0xE7EBEE);
-    public static final Color SEMI_LIGHT_GRAY_COLOR = new Color(0xDBDDDE);
-    public static final Color GRAY_COLOR = new Color(0x484C4D);
-    public static final Color LIGHT_BLUE_COLOR = new Color(0x6EB6E7);
-    public static final Color SEMI_LIGHT_BLUE_COLOR = new Color(0x4AA8E8);
-    public static final Color BASE_BLUE_COLOR = new Color(0x2D92E5);
-    public static final Color MEDIUM_BASE_BLUE_COLOR = new Color(0x237DB9);
-    public static final Color SEMI_DARK_BLUE_COLOR = new Color(0x084269);
-    public static final Color DARK_BLUE_COLOR = new Color(0x03243A);
-    public static final Color LIGHT_RED_COLOR = new Color(0xFFB9B9);
-    public static final Color RED_COLOR = new Color(0xCE2222);
-    public static final Color LIGHT_YELLOW_COLOR = new Color(0xFCE4A7);
-    public static final Color YELLOW_COLOR = new Color(0xDCA61D);
-    public static final Color LIGHT_GREEN_COLOR = new Color(0xC3FFCC);
-    public static final Color GREEN_COLOR = new Color(0x11A129);
+    public static final Color BG_PAGE       = new Color(0xEFF4FB);
+    public static final Color BLUE_MAIN     = new Color(0x1D4ED8);
+    public static final Color BLUE_HOVER    = new Color(0x1E3A8A);
+    public static final Color CARD_BG       = Color.WHITE;
+    public static final Color TEXT_DARK     = new Color(0x0F172A);
+    public static final Color TEXT_MED      = new Color(0x334155);
+    public static final Color BORDER_COLOR  = new Color(0xCBD5E1);
+    public static final Color HEADER_BG     = Color.WHITE;
+    public static final Color STRIP1 = new Color(0x1A5276);
+    public static final Color STRIP2 = new Color(0xE74C3C);
+    public static final Color STRIP3 = new Color(0x27AE60);
+    public static final Color STRIP4 = new Color(0xF39C12);
+    public static final Color HERO_TOP  = new Color(0x1E3A8A);
+    public static final Color HERO_BOT  = new Color(0x2563EB);
+    public static final Color SECONDARY_BG     = new Color(0xEFF6FF);
+    public static final Color SECONDARY_BORDER  = new Color(0x93C5FD);
+    public static final Color SECONDARY_TEXT    = new Color(0x1D4ED8);
 
 }

@@ -13,11 +13,13 @@ public class MainFrame extends JFrame {
 
 
     public MainFrame() {
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         root = new JPanel(new BorderLayout());
+
+        setBackground(Color.WHITE);
 
         layout = new CardLayout();
         container = new JPanel(layout);
-
         sidebar = new SidebarPanel();
 
         root.add(sidebar, BorderLayout.WEST);

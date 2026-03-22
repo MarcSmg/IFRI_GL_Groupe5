@@ -2,10 +2,12 @@ package views.enums;
 
 public enum ViewName {
     LOGIN,
-    SIGNUP,
+    REGISTER,
+    ACCOUNT_MANAGEMENT,
     ADMIN_DASHBOARD,
-    AGENT_DASHBOARD,
+    DEMANDS_MANAGEMENT,
+    DEMAND_DETAILS,
     USER_DASHBOARD,
-    DEMANDS_LIST,
-    ACCOUNT_MANAGEMENT
+    DEMANDES,
+    ACTES
 }

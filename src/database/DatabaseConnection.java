@@ -8,15 +8,19 @@ import java.sql.Statement;
 
 public class DatabaseConnection {
 
-    private final String DB_NAME = "database";
-    private final String DB_URL = "jdbc:sqlite:" + DB_NAME + ".sqlite";
+    private final String PORT = "3306";
+    private final String DB_NAME = "acts_database";
+    private final String DB_URL = "jdbc:mysql://localhost:" + PORT + "/" + DB_NAME + "?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC";
+    private final String USER = "root";
+    private final String PASSWORD = "";
     private Connection connection;
     private static DatabaseConnection instance;
 
     private DatabaseConnection() {
         try {
-            connection = DriverManager.getConnection(DB_URL);
-        } catch (SQLException e) {
+            Class.forName("com.mysql.jdbc.Driver");
+            connection = DriverManager.getConnection(DB_URL, USER, PASSWORD);
+        } catch (SQLException | ClassNotFoundException e) {
             System.err.println("!! Une erreur est subvenue lors de la connection : " + e.getMessage());
         }
     }

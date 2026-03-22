@@ -5,10 +5,11 @@ import models.enums.AdministrativeActType;
 import models.enums.DemandStatus;
 
 public class Demand {
-    private int id;
+    private Integer id;
     private String demandNumber;
     private DemandStatus status;
     private AdministrativeActType actType;
+    private Integer actId;
     private int usagerId;
     private LocalDateTime creationDate;
     
@@ -28,7 +29,7 @@ public class Demand {
         this.status = status;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
     
@@ -50,7 +51,10 @@ public class Demand {
     public String getActType(){
         return actType.name();
     }
-    
+
+    public Integer getActId() {
+        return actId;
+    }
     //les setters
     
     public void setDemandNumber(String demandNumber) {
@@ -61,7 +65,7 @@ public class Demand {
         this.status = status;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -75,6 +79,11 @@ public class Demand {
     public void setTypeAct(AdministrativeActType type){
         this.actType = type;
     }
+
+    public void setActId(Integer actId) {
+        this.actId = actId;
+    }
+
     public void submit() {
         setStatus(DemandStatus.PENDING);
     }

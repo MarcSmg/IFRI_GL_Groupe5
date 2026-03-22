@@ -10,6 +10,8 @@ public class SidebarPanel extends JPanel {
 
     public SidebarPanel() {
 
+        setBackground(Color.WHITE);
+
         // Main layout of sidebar
         setLayout(new BorderLayout());
 
@@ -19,6 +21,7 @@ public class SidebarPanel extends JPanel {
 
         // Container for menu items (vertical)
         menuContainer = new JPanel();
+        menuContainer.setBackground(Color.WHITE);
         menuContainer.setLayout(new BoxLayout(menuContainer, BoxLayout.Y_AXIS));
         // Align items to the top
         menuContainer.setAlignmentY(Component.TOP_ALIGNMENT);
@@ -33,6 +36,7 @@ public class SidebarPanel extends JPanel {
         add(scrollPane, BorderLayout.CENTER);
 
         JPanel bottomPanel = new JPanel();
+        bottomPanel.setBackground(Color.WHITE);
         bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.Y_AXIS));
 
         bottomPanel.setBorder(BorderFactory.createEmptyBorder(10,0,0,0));
@@ -81,6 +85,6 @@ public class SidebarPanel extends JPanel {
     }
 
     public void setUserName(String userName) {
-        userNameLabel.setText("User : " + userName);
+        userNameLabel.setText("Utilisateur : " + userName);
     }
 }
