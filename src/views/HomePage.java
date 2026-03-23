@@ -357,14 +357,18 @@ public class HomePage extends JFrame {
         row.setOpaque(false);
         row.setMaximumSize(new Dimension(Integer.MAX_VALUE, 100));
         row.setAlignmentX(LEFT_ALIGNMENT);
+        
+        java.awt.event.ActionListener openLogin = e -> {
+        NavigationManager.showConnexion();
+    };
 
-        row.add(buildActionCard("📄", "Besoin d'une attestation ?",       "Faire une demande",                true));
-        row.add(buildActionCard("📁", "Gérer les dossiers",               "Accéder à votre espace de travail", false));
+        row.add(buildActionCard("📄", "Besoin d'une attestation ?",       "Faire une demande",                true, openLogin));
+        row.add(buildActionCard("📁", "Gérer les dossiers",               "Accéder à votre espace de travail", false, openLogin));
 
         return row;
     }
 
-    private JPanel buildActionCard(String icon, String label, String btnText, boolean primary) {
+    private JPanel buildActionCard(String icon, String label, String btnText, boolean primary, java.awt.event.ActionListener action) {
         JPanel card = new JPanel(new BorderLayout(12, 0)) {
             @Override protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g;
@@ -392,7 +396,7 @@ public class HomePage extends JFrame {
         left.add(lbl);
 
         JButton btn = primary ? buildBlueButton(btnText) : buildOutlineButton(btnText);
-
+        btn.addActionListener(action);
         card.add(left, BorderLayout.WEST);
         card.add(btn,  BorderLayout.EAST);
         return card;
