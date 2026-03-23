@@ -37,7 +37,7 @@ public class DemandDetailsController {
     }
 
     private void checkIfActExists() {
-        if (demand.getId() != null) {
+        if (demand.getActId() != null) {
             view.showActAvailable();
         }
     }

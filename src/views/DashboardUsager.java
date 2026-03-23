@@ -15,6 +15,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.RoundRectangle2D;
 import java.util.List;
+
+import dao.DemandDAO;
 import models.*;
 import models.enums.DemandStatus;
 import models.enums.AdministrativeActType;
@@ -409,7 +411,7 @@ public class DashboardUsager {
         // mockUser.setRole(Role.USER); 
 
         // 3. Création d'un contrôleur anonyme pour simuler les données
-        UsagerController mockController = new UsagerController() {
+        UsagerController mockController = new UsagerController(new DemandDAO()) {
             @Override
             public java.util.List<Demand> chargerDemandesUtilisateur(int userId) {
                 // On crée une liste de demandes factices pour tester le design des cartes
@@ -419,13 +421,8 @@ public class DashboardUsager {
                 d1.setDemandNumber("2024-001");
                 d1.setTypeAct(AdministrativeActType.CERTIFICAT_SCOLARITE);
                 d1.setStatus(DemandStatus.PENDING);
-                
-                
-                
-                
 
                 testDemands.add(d1);
-             
                 
                 return testDemands;
             }

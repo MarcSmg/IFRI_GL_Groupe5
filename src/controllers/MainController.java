@@ -87,7 +87,8 @@ public class MainController {
         AgentDemandController controller = new AgentDemandController(
                 agentDemandsView,
                 navigation,
-                demandDAO
+                demandDAO,
+                userDAO
         );
 
         mainFrame.addView(ViewName.DEMANDS_MANAGEMENT, agentDemandsView);

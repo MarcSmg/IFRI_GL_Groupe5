@@ -89,7 +89,6 @@ public class AdministrativeAct {
         setIsSigned(true);
     }
 
-
     public boolean generateDocx() {
         try {
             XWPFDocument document = new XWPFDocument();

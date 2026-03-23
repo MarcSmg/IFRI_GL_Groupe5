@@ -12,6 +12,7 @@ import models.enums.Role;
  */
 public class AgentAdministratif extends User {
     private AgentFunction function;
+    private int agentId;
    private byte[] signature;
    private byte[] cachet ;
    public AgentAdministratif() { setRole(Role.AGENT_ADMINISTRATIF);};
@@ -25,8 +26,15 @@ public class AgentAdministratif extends User {
     return function;
     }
 
+    public int getAgentId() {
+        return agentId;
+    }
+
     public void setFunction(AgentFunction func) {
         this.function = func;
     }
-    
+
+    public void setAgentId(int agentId) {
+        this.agentId = agentId;
+    }
 }

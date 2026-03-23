@@ -2,25 +2,33 @@ package controllers;
 
 import dao.AdministrativeActDAO;
 import dao.DemandDAO;
+import dao.UsagerDAO;
+import dao.UserDAO;
 import models.Demand;
+import models.enums.AdministrativeActType;
 import models.enums.DemandStatus;
 import views.AgentDemandView;
 import views.AgentDemandDetailsView;
 import views.enums.ViewName;
 
+import java.util.List;
+
 public class AgentDemandController {
 
+    private List<Demand> demands;
     private AgentDemandView view;
-    NavigationController navigation;
+    private NavigationController navigation;
     private DemandDAO demandDAO;
+    private UserDAO userDAO;
 
     public AgentDemandController(AgentDemandView view,
                                  NavigationController navigation,
-                                 DemandDAO demandDAO) {
+                                 DemandDAO demandDAO, UserDAO userDAO) {
 
         this.view = view;
         this.navigation = navigation;
         this.demandDAO = demandDAO;
+        this.userDAO = userDAO;
 
         loadDemands();
 
@@ -31,12 +39,19 @@ public class AgentDemandController {
     }
 
     private void loadDemands() {
+        demands = demandDAO.findAll();
+        Object[][] data = new Object[demands.size()][5];
 
-        Object[][] data = {
-                {1, "Marc Dupont", "Attestation d'inscription", "2026-03-22", "En cours"},
-                {2, "Alice Martin", "Certificat de scolarité", "2026-03-20", "Validé"},
-                {3, "Jean Kossi", "Relevé de notes", "2026-03-18", "Rejeté"}
-        };
+
+        for (int i = 0; i < demands.size(); i++) {
+            Demand d = demands.get(i);
+
+            data[i][0] = d.getId();
+            data[i][1] = userDAO.findById(demands.get(i).getUsagerId()).getFullName();
+            data[i][2] = AdministrativeActType.valueOf(d.getActType()).getLabel();
+            data[i][3] = d.getCreationDate();
+            data[i][4] = d.getStatus().getLabel();
+        }
 
         view.setDemands(data);
     }
@@ -64,16 +79,15 @@ public class AgentDemandController {
 
     private void openDetails() {
 
-        int id = view.getSelectedDemandId();
-        if (id == -1) return;
+        int selectedId = view.getSelectedDemandId();
+        if (selectedId == -1) return;
 
-        Demand demand = demandDAO.findByID(id);
+        Demand demand = demands.stream()
+                .filter(d -> d.getId() == selectedId)
+                .findFirst()
+                .orElse(null);
 
-        if (demand == null) {
-            System.err.println("Demande introuvable pour ID = " + id);
-            return;
-        }
-
+        if (demand == null) return;
 
         AgentDemandDetailsView detailsView = new AgentDemandDetailsView();
 
@@ -84,6 +98,7 @@ public class AgentDemandController {
                 new AdministrativeActDAO()
         );
 
+        navigation.addView(ViewName.DEMAND_DETAILS, detailsView);
         navigation.goTo(ViewName.DEMAND_DETAILS);
     }
 }
