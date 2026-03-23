@@ -127,10 +127,10 @@ public class AdministrativeAct {
 
     private void generateFormattedDocument(XWPFDocument document) {
         switch (type) {
-
+/*
             case ATTESTATION_INSCRIPTION:
                 generateAttestationInscriptionDoc(document);
-                break;
+                break;*/
 
             case RELEVE_NOTES:
                 generateReleveNotesDoc(document);

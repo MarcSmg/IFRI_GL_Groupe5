@@ -104,7 +104,12 @@ public class DatabaseInitializer {
                 + ");";
 
         try(Connection conn = DatabaseConnection.getInstance().getConnection();
+                
             Statement stmt = conn.createStatement()){
+            
+            if (conn == null) {
+        System.err.println("ERREUR : La connexion est nulle. Vérifiez que MySQL est lancé sur XAMPP.");
+        return;}
                 stmt.execute(createUserTable);
                 stmt.execute(createAgentTable);
                 stmt.execute(createUsagerTable);
