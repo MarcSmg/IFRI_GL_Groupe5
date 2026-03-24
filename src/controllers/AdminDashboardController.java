@@ -10,11 +10,13 @@ public class AdminDashboardController {
     private AdminDashboardView view;
     private UserDAO userDAO;
     private NavigationController navigation;
+    private DemandDAO demandDAO;
 
     public AdminDashboardController(AdminDashboardView view, NavigationController navigation, UserDAO userDAO, DemandDAO demandDAO) {
         this.view = view;
 
-        userDAO = new UserDAO();
+        this.userDAO = new UserDAO();
+        this.demandDAO = new DemandDAO();
         this.navigation = navigation;
         init();
     }
@@ -26,27 +28,27 @@ public class AdminDashboardController {
 
     private void loadStats() {
 
-//        int totalUsers = userDAO.countAll();
-//        int activeUsers = userDAO.countActive();
-//        int inactiveUsers = userDAO.countInactive();
-//
-//        int totalDemands = demandDAO.countAll();
-//        int pendingDemands = demandDAO.countPending();
-//
-//        view.setStats(
-//                totalUsers,
-//                activeUsers,
-//                inactiveUsers,
-//                totalDemands,
-//                pendingDemands
-//        );
+        int totalUsers = userDAO.countAll();
+        int activeUsers = userDAO.countActive();
+        int inactiveUsers = userDAO.countInactive();
+
+        int totalDemands = demandDAO.findCountInDB();
+        int pendingDemands = demandDAO.countPending();
+
+        view.setStats(
+                totalUsers,
+                activeUsers,
+                inactiveUsers,
+                totalDemands,
+                pendingDemands
+        );
     }
 
     private void bindActions() {
 
         view.onManageAccounts(() -> navigation.goTo(ViewName.ACCOUNT_MANAGEMENT));
 
-        view.onViewDemands(() -> navigation.goTo(ViewName.DEMANDES));
+        view.onViewDemands(() -> navigation.goTo(ViewName.DEMANDS_MANAGEMENT));
 
         view.onManageActs(() -> navigation.goTo(ViewName.ACTES));
     }

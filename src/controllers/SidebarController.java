@@ -25,16 +25,14 @@ public class SidebarController {
 
             items.add(new NavItem("Dashboard", () -> navigation.goTo(ViewName.ADMIN_DASHBOARD)));
             items.add(new NavItem("Gestion de comptes", () -> navigation.goTo(ViewName.ACCOUNT_MANAGEMENT)));
+            items.add(new NavItem("Gestion des usagers", () -> navigation.goTo(ViewName.USAGER_LIST)));
 
-        } else if (user.getRole() == Role.AGENT_ADMINISTRATIF) {
+        } else if (user.getRole() == Role.AGENT) {
 
             items.add(new NavItem("Gestion des demandes", () -> navigation.goTo(ViewName.DEMANDS_MANAGEMENT)));
 
         } else if (user.getRole() == Role.USAGER) {
             items.add(new NavItem("Vos demandes", () -> navigation.goTo(ViewName.USER_DASHBOARD)));
-
-            items.add(new NavItem("Dashboard", () -> navigation.goTo(ViewName.USER_DASHBOARD)));
-
         }
 
         sidebar.setNavItems(items);

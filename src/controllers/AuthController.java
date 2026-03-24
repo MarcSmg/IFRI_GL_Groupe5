@@ -129,7 +129,7 @@ public class AuthController {
 
         // 3. Mise à jour dans la base de données
         UserDAO userDAO = new UserDAO();
-        boolean success = userDAO.changePassword(userId, nouveau);
+        boolean success = userDAO.changePassword(userId, SecurityUtils.hashPassword(nouveau));
 
         if (success) {
             JOptionPane.showMessageDialog(view.getPanelPrincipal(), 
@@ -162,7 +162,7 @@ public class AuthController {
         UserDAO userDAO = new UserDAO();
         User user = userDAO.findByLoginOrEmail(identifier);
 
-        if (user != null && user.getPassword().equals(password)) {
+        if (user != null && SecurityUtils.verifyPassword(password, user.getPassword())) {
             
             // 3. Création de la Session
             SessionManager.getInstance().createSession(

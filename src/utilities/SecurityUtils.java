@@ -20,4 +20,11 @@ public class SecurityUtils {
     public static String hashPassword(String plainTextPassword) {
         return BCrypt.hashpw(plainTextPassword, BCrypt.gensalt());
     }
+
+    public static boolean verifyPassword(String plainTextPassword, String hashedPassword) {
+        if (plainTextPassword == null || hashedPassword == null) {
+            return false;
+        }
+        return BCrypt.checkpw(plainTextPassword, hashedPassword);
+    }
 }

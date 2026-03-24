@@ -1,5 +1,6 @@
 package controllers;
 
+import dao.AgentAdministratifDAO;
 import dao.DemandDAO;
 import dao.UserDAO;
 import models.Usager;
@@ -11,11 +12,12 @@ import views.enums.ViewName;
 import java.awt.*;
 
 public class MainController {
-    MainFrame mainFrame;
-    NavigationController navigation;
-    SidebarController sidebarController;
-    UserDAO userDAO;
-    DemandDAO demandDAO;
+    private MainFrame mainFrame;
+    private NavigationController navigation;
+    private SidebarController sidebarController;
+    private UserDAO userDAO;
+    private DemandDAO demandDAO;
+    private AgentAdministratifDAO agentAdministratifDAO;
 
     public MainController(MainFrame mainFrame) {
 
@@ -25,6 +27,7 @@ public class MainController {
 
         userDAO = new UserDAO();
         demandDAO = new DemandDAO();
+        agentAdministratifDAO = new AgentAdministratifDAO();
 
     }
 
@@ -40,7 +43,7 @@ public class MainController {
             setupUsagerUI((Usager) user);
         } else if (user.getRole() == Role.ADMINISTRATEUR) {
             setupAdminUI(user);
-        } else if (user.getRole() == Role.AGENT_ADMINISTRATIF) {
+        } else if (user.getRole() == Role.AGENT) {
             setupAgentUI(user);
         }
 
@@ -66,6 +69,7 @@ public class MainController {
 
         AdminDashboardView adminDashboardView = new AdminDashboardView();
         AccountManagementView accountManagementView = new AccountManagementView();
+        UserListContainer userListContainer = new UserListContainer(new AdminController());
 
         new AdminDashboardController(
                 adminDashboardView,
@@ -74,8 +78,16 @@ public class MainController {
                 demandDAO
         );
 
+        new AccountManagementController(
+                accountManagementView,
+                navigation,
+                userDAO,
+                agentAdministratifDAO
+        );
+
         mainFrame.addView(ViewName.ADMIN_DASHBOARD, adminDashboardView);
         mainFrame.addView(ViewName.ACCOUNT_MANAGEMENT, accountManagementView);
+        mainFrame.addView(ViewName.USAGER_LIST, userListContainer.getPanelPrincipal());
 
         navigation.goTo(ViewName.ADMIN_DASHBOARD);
     }

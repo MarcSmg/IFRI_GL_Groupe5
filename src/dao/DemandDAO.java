@@ -196,4 +196,24 @@ public class DemandDAO extends BaseDAO<Demand> {
     }
     return liste;
 }
+
+    public int countPending() {
+        String sql = "SELECT COUNT(*) FROM demandes WHERE statut = ?";
+
+        try (PreparedStatement stmt = getConnection().prepareStatement(sql)) {
+
+            stmt.setString(1, "PENDING");
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Erreur countPending demandes : " + e.getMessage());
+        }
+
+        return 0;
+    }
 }

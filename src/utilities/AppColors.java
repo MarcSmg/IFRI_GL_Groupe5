@@ -10,6 +10,7 @@ public class AppColors {
     public static final Color BLUE_MAIN     = new Color(0x1D4ED8);
     public static final Color BLUE_HOVER    = new Color(0x1E3A8A);
     public static final Color CARD_BG       = Color.WHITE;
+    public static final Color CARD_SELECTED  = new Color(235, 243, 255);
     public static final Color TEXT_DARK     = new Color(0x0F172A);
     public static final Color TEXT_MED      = new Color(0x334155);
     public static final Color BORDER_COLOR  = new Color(0xCBD5E1);

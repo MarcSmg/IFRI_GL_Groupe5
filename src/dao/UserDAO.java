@@ -7,7 +7,7 @@ import models.*;
 import java.sql.*;
 import database.*;
 import models.enums.Role;
-import utilities.*;
+
 import java.util.*;
 
 /**
@@ -93,6 +93,7 @@ public class UserDAO {
                 String role = rs.getString("role");
                 user.setRole(Role.valueOf(role));
                 user.setPassword(rs.getString("password"));
+                user.setIsAble(rs.getBoolean("is_able"));
                 user.setIsTemporary(rs.getBoolean("is_temporary"));
                 return user;
             }
@@ -101,7 +102,7 @@ public class UserDAO {
     }
 
     public boolean changePassword(int id , String pwd){
-        String sql = "UPDATE users SET password = ?, is_temporary= ?,  WHERE id = ? ";
+        String sql = "UPDATE users SET password = ?, is_temporary= ?  WHERE id = ? ";
         try(Connection conn = DatabaseConnection.getInstance().getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);){
             pstmt.setString(1, pwd);
@@ -135,56 +136,70 @@ public class UserDAO {
 
 
     public List<UserSummaryDTO> getAllUsersWithDemandes() {
-    List<UserSummaryDTO> users = new ArrayList<>();
-    
-    // Requête SQL mise à jour : on sélectionne 'nom' et 'prenom' séparément
-    String sql = "SELECT u.matricule, u.nom, u.prenom, u.filiere, u.niveau_etude, " +
-                 "COUNT(d.id) AS total_demandes, " +
-                 "(SELECT status FROM demandes d2 WHERE d2.user_id = u.id " +
-                 " ORDER BY d2.date_creation DESC LIMIT 1) AS dernier_statut " +
-                 "FROM users u " +
-                 "LEFT JOIN demandes d ON u.id = d.user_id " +
-                 "GROUP BY u.id, u.matricule, u.nom, u.prenom, u.filiere, u.niveau_etude";
+        List<UserSummaryDTO> users = new ArrayList<>();
 
-    try (Connection conn = DatabaseConnection.getInstance().getConnection();
-         PreparedStatement ps = conn.prepareStatement(sql);
-         ResultSet rs = ps.executeQuery()) {
+        String sql =
+                "SELECT u.id, u.login, u.last_name, u.first_name, " +
+                        "us.field_of_study, us.study_level, " +
+                        "COUNT(d.id) AS total_demandes, " +
+                        "ld.statut AS dernier_statut " +
 
-        while (rs.next()) {
-            // On récupère les valeurs individuelles
-            String lastName = rs.getString("nom");
-            String firstName = rs.getString("prenom");
-            
-            // Création de l'objet avec les nouveaux champs firstName et lastName
-            UserSummaryDTO user = new UserSummaryDTO(
-                rs.getString("matricule"),
-                firstName,
-                lastName,
-                rs.getString("filiere"),
-                rs.getString("niveau_etude"),
-                rs.getInt("total_demandes"),
-                rs.getString("dernier_statut")
-            );
-            users.add(user);
+                        "FROM users u " +
+
+                        // join usager info
+                        "LEFT JOIN usagers us ON us.user_id = u.id " +
+
+                        // count demandes
+                        "LEFT JOIN demandes d ON u.id = d.user_id " +
+
+                        // latest demande
+                        "LEFT JOIN demandes ld ON ld.id = ( " +
+                        "   SELECT d2.id FROM demandes d2 " +
+                        "   WHERE d2.user_id = u.id " +
+                        "   ORDER BY d2.date_creation DESC " +
+                        "   LIMIT 1 " +
+                        ") " +
+
+                        "GROUP BY u.id, u.login, u.last_name, u.first_name, " +
+                        "us.field_of_study, us.study_level, ld.statut";
+
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+
+                UserSummaryDTO user = new UserSummaryDTO(
+                        rs.getString("login"),
+                        rs.getString("first_name"),
+                        rs.getString("last_name"),
+                        rs.getString("field_of_study"),
+                        rs.getString("study_level"),
+                        rs.getInt("total_demandes"),
+                        rs.getString("dernier_statut")
+                );
+
+                users.add(user);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    } catch (SQLException e) {
-        // Dans un environnement pro, il serait mieux d'utiliser un Logger
-        e.printStackTrace();
+
+        return users;
     }
-    return users;
-}
 
     public boolean update(User user) {
 
-        String sql = "UPDATE users SET is_able = ?, is_temporary = ? WHERE id = ?";
+        String sql = "UPDATE users SET is_able = ? WHERE id = ?";
 
         try (PreparedStatement pstmt = DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
 
             pstmt.setBoolean(1, user.getIsAble());
-            pstmt.setBoolean(2, user.getIsTemporary());
-            pstmt.setInt(3, user.getId());
+            pstmt.setInt(2, user.getId());
 
-            return pstmt.executeUpdate() > 0;
+            int rows = pstmt.executeUpdate();
+            System.out.println("Rows updated = " + rows);
 
         } catch (SQLException e) {
             System.err.println("Erreur update user : " + e.getMessage());
@@ -192,5 +207,76 @@ public class UserDAO {
 
         return false;
     }
+
+    public int countAll() {
+        String sql = "SELECT COUNT(*) FROM users";
+
+        try (PreparedStatement stmt = DatabaseConnection.getInstance().getConnection().prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Erreur countAll users : " + e.getMessage());
+        }
+
+        return 0;
+    }
+
+    public int countActive() {
+        String sql = "SELECT COUNT(*) FROM users WHERE is_able = TRUE";
+
+        try (PreparedStatement stmt = DatabaseConnection.getInstance().getConnection().prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Erreur countActive users : " + e.getMessage());
+        }
+
+        return 0;
+    }
+    public int countInactive() {
+        String sql = "SELECT COUNT(*) FROM users WHERE is_able = FALSE";
+
+        try (PreparedStatement stmt = DatabaseConnection.getInstance().getConnection().prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Erreur countInactive users : " + e.getMessage());
+        }
+
+        return 0;
+    }
+
+    public boolean existsByRole(Role function) {
+        String sql = "SELECT COUNT(*) FROM users WHERE role = ?";
+
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, function.name());
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
 }
 

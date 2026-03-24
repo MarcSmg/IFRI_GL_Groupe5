@@ -27,7 +27,12 @@ public class AdminController {
     private UserDAO userDAO;
       private AgentsPermissionsDAO permissionsDAO;
 
-      public AdminController() {}
+      public AdminController() {
+          this.agentDAO = new AgentAdministratifDAO();
+          this.whiteListDAO = new WhiteListDAO();
+          this.userDAO = new UserDAO();
+          this.permissionsDAO = new AgentsPermissionsDAO();
+      }
     public AdminController(Administrateur admin) {
         this.adminConnecte = admin;
         this.agentDAO = new AgentAdministratifDAO();

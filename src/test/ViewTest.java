@@ -21,8 +21,8 @@ public class ViewTest {
         Usager usager = new Usager("1511", "SOSSOU", "Bob", "sossoubob@gmail.com", Role.USAGER, "");
         Administrateur admin = new Administrateur();
         AgentAdministratif agent = new AgentAdministratif("DONAN", "Pierre", "donanp@gmail.com", AgentFunction.SECRETAIRE_GENERAL, "");
-//        mainController.onLoginSuccess(usager);
-        mainController.onLoginSuccess(admin);
+        mainController.onLoginSuccess(usager);
+//        mainController.onLoginSuccess(admin);
 //        mainController.onLoginSuccess(agent);
     }
 }

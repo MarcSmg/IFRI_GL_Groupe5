@@ -6,6 +6,7 @@ import models.User;
 import models.AgentAdministratif;
 import models.enums.AgentFunction;
 import models.enums.Role;
+import utilities.SecurityUtils;
 import views.AccountManagementView;
 
 import java.util.List;
@@ -15,12 +16,15 @@ public class AccountManagementController {
     private AccountManagementView view;
     private UserDAO userDAO;
     private AgentAdministratifDAO agentDAO;
+    private NavigationController navigation;
 
     public AccountManagementController(AccountManagementView view,
+                                       NavigationController navigation,
                                        UserDAO userDAO,
                                        AgentAdministratifDAO agentDAO) {
 
         this.view = view;
+        this.navigation = navigation;
         this.userDAO = userDAO;
         this.agentDAO = agentDAO;
 
@@ -62,46 +66,53 @@ public class AccountManagementController {
             return;
         }
 
-        // 1. Create user
-        User user = new User();
-        user.setPrenom(firstName);
-        user.setNom(lastName);
-        user.setEmail(email);
-        user.setRole(Role.AGENT_ADMINISTRATIF);
-
-        // Temporary password
-        String tempPassword = generateTemporaryPassword();
-        user.setPassword(tempPassword);
-
-        user.setIsTemporary(true);
-        user.setIsAble(true);
-
-        int userId = userDAO.insert(user);
-        if (userId == -1) return;
-
-        // 2. Create agent
         AgentAdministratif agent = new AgentAdministratif();
-        agent.setId(userId);
+
+        agent.setPrenom(firstName);
+        agent.setNom(lastName);
+        agent.setEmail(email);
         agent.setFunction(function);
+        agent.setRole(Role.AGENT);
 
-        agentDAO.createAgent(agent);
+        String tempPassword = generateTemporaryPassword();
+        agent.setPassword(SecurityUtils.hashPassword(tempPassword));
 
-        // Reload table
+        agent.setIsTemporary(true);
+        agent.setIsAble(true);
+
+        agentDAO.insert(agent); // ONLY this
+
         loadAgents();
     }
 
     // ---------------- TOGGLE ----------------
     private void toggleStatus() {
 
-        int userId = view.getSelectedUserId();
-        if (userId == -1) return;
+        int agentId = view.getSelectedUserId();
+        if (agentId == -1) {
+            System.err.println("Agent user id not found");
+            return;
+        }
 
+        int userId = agentDAO.findUserIdByAgentId(agentId);
         User user = userDAO.findById(userId);
-        if (user == null) return;
 
-        user.setIsAble(!user.getIsAble());
+        if (user == null) {
+            System.err.println("Agent user not found");
+            return;
+        }
 
-        userDAO.update(user);
+        System.out.println(" User " + userId + " old status = " + user.getIsAble());
+
+        boolean newStatus = !user.getIsAble();
+        user.setIsAble(newStatus);
+
+        System.out.println(" User " + userId + " new status = " + newStatus);
+
+        System.out.println(userDAO.update(user));
+
+        User freshUser = userDAO.findById(userId);
+        System.out.println(" DB status = " + freshUser.getIsAble());
 
         loadAgents();
     }

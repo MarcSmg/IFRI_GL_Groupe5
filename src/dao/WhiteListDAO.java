@@ -55,7 +55,7 @@ public class WhiteListDAO {
     }
     
     public boolean saveAll(List<WhiteListEntry> entries) {
-    String sql = "INSERT INTO white_list_usagers (matricule, lastName, firstName, birth_date, place_birth, fieldOfStudy, study_level) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    String sql = "INSERT INTO white_list_usagers (matricule, last_name, first_name, birth_date, place_birth, fieldOfStudy, study_level) VALUES (?, ?, ?, ?, ?, ?, ?)";
     
     try (Connection conn = DatabaseConnection.getInstance().getConnection();
          PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -84,7 +84,7 @@ public class WhiteListDAO {
     }
 }
     public boolean addEntry(WhiteListEntry entry) {
-    String sql = "INSERT INTO white_list_usagers (matricule, lastName, firstName, birth_date, place_birth, fieldOfStudy, study_level) VALUES(?, ?, ?, ?, ?, ?, ?)";
+    String sql = "INSERT INTO white_list_usagers (matricule, last_name, first_name, birth_date, place_birth, field_of_study, study_level) VALUES(?, ?, ?, ?, ?, ?, ?)";
     
     try (Connection conn = DatabaseConnection.getInstance().getConnection();
          PreparedStatement pstmt = conn.prepareStatement(sql)) {

@@ -10,6 +10,6 @@ package models.enums;
 public enum Role {
     ADMINISTRATEUR,
     USAGER,
-    AGENT_ADMINISTRATIF
+    AGENT
     
 }

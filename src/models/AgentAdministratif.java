@@ -15,9 +15,9 @@ public class AgentAdministratif extends User {
     private int agentId;
    private byte[] signature;
    private byte[] cachet ;
-   public AgentAdministratif() { setRole(Role.AGENT_ADMINISTRATIF);};
+   public AgentAdministratif() { setRole(Role.AGENT);};
     public AgentAdministratif(String nom, String prenom, String email,AgentFunction func,  String motDePasseTemporaire){
-        super(nom, prenom, email, Role.AGENT_ADMINISTRATIF, motDePasseTemporaire, true);
+        super(nom, prenom, email, Role.AGENT, motDePasseTemporaire, true);
         this.function = func;
         
     }
