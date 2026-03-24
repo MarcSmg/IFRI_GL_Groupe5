@@ -18,9 +18,39 @@ public class UserDAO {
     
     public UserDAO(){
         
-        
-        
-    }    
+    }
+
+    public int insert(User user) {
+
+        String sql = "INSERT INTO users (first_name, last_name, email, password, role, is_temporary, is_able) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement pstmt = DatabaseConnection.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            pstmt.setString(1, user.getFirstName());
+            pstmt.setString(2, user.getLastName());
+            pstmt.setString(3, user.getEmail());
+            pstmt.setString(4, user.getPassword());
+            pstmt.setString(5, user.getRole().name());
+            pstmt.setBoolean(6, user.getIsTemporary());
+            pstmt.setBoolean(7, user.getIsAble());
+
+            int affectedRows = pstmt.executeUpdate();
+
+            if (affectedRows == 0) return -1;
+
+            ResultSet rs = pstmt.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Erreur insertion user : " + e.getMessage());
+        }
+
+        return -1;
+    }
+
     public User findByLoginOrEmail(String identifier) {
             String sql = "SELECT * FROM users WHERE login = ? OR email = ?";
             try (Connection conn = DatabaseConnection.getInstance().getConnection();
@@ -34,8 +64,8 @@ public class UserDAO {
                     User user = new User();
                     user.setEmail(rs.getString("email"));
                     user.setId(rs.getInt("id"));
-                    user.setNom(rs.getString("lastName"));
-                    user.setPrenom(rs.getString("firstName"));
+                    user.setNom(rs.getString("last_name"));
+                    user.setPrenom(rs.getString("first_name"));
                     String role = rs.getString("role");
                     user.setRole(Role.valueOf(role));
                     user.setPassword(rs.getString("password"));
@@ -45,6 +75,30 @@ public class UserDAO {
             } catch (SQLException e) { e.printStackTrace(); }
             return null;
         }
+
+    public User findById(int id) {
+        String sql = "SELECT * FROM users WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                User user = new User();
+                user.setEmail(rs.getString("email"));
+                user.setId(rs.getInt("id"));
+                user.setNom(rs.getString("last_name"));
+                user.setPrenom(rs.getString("first_name"));
+                String role = rs.getString("role");
+                user.setRole(Role.valueOf(role));
+                user.setPassword(rs.getString("password"));
+                user.setIsTemporary(rs.getBoolean("is_temporary"));
+                return user;
+            }
+        } catch (SQLException e) { e.printStackTrace(); }
+        return null;
+    }
 
     public boolean changePassword(int id , String pwd){
         String sql = "UPDATE users SET password = ?, is_temporary= ?,  WHERE id = ? ";
@@ -119,5 +173,24 @@ public class UserDAO {
     }
     return users;
 }
+
+    public boolean update(User user) {
+
+        String sql = "UPDATE users SET is_able = ?, is_temporary = ? WHERE id = ?";
+
+        try (PreparedStatement pstmt = DatabaseConnection.getInstance().getConnection().prepareStatement(sql)) {
+
+            pstmt.setBoolean(1, user.getIsAble());
+            pstmt.setBoolean(2, user.getIsTemporary());
+            pstmt.setInt(3, user.getId());
+
+            return pstmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Erreur update user : " + e.getMessage());
+        }
+
+        return false;
+    }
 }
 

@@ -22,7 +22,7 @@ public class ViewTest {
         Administrateur admin = new Administrateur();
         AgentAdministratif agent = new AgentAdministratif("DONAN", "Pierre", "donanp@gmail.com", AgentFunction.SECRETAIRE_GENERAL, "");
 //        mainController.onLoginSuccess(usager);
-//        mainController.onLoginSuccess(admin);
-        mainController.onLoginSuccess(agent);
+        mainController.onLoginSuccess(admin);
+//        mainController.onLoginSuccess(agent);
     }
 }

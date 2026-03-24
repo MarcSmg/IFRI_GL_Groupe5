@@ -18,6 +18,7 @@ public class User {
     private String password;
     private Role role;
     private boolean isTemporary;
+    private boolean isAble;
     
     //constructeur 
     // pour l'admin et agent 
@@ -45,6 +46,11 @@ public class User {
     public String getFirstName(){
         return firstName;
     }
+
+    public String getFullName() {
+        return firstName + lastName;
+    }
+
     public String getEmail(){
         return email;
     }
@@ -58,6 +64,11 @@ public class User {
     public boolean getIsTemporary(){
         return isTemporary;
     }
+
+    public boolean getIsAble() {
+        return isAble;
+    }
+
     // les setters
     public void setId(int id){
         this.id = id;
@@ -83,5 +94,9 @@ public class User {
     public void setIsTemporary(boolean temporary){
         this.isTemporary = temporary;
         
+    }
+
+    public void setIsAble(boolean able) {
+        isAble = able;
     }
 }

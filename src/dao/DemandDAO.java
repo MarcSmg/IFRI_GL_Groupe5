@@ -25,7 +25,7 @@ public class DemandDAO extends BaseDAO<Demand> {
                 demand.setId(resultSet.getInt("id"));
                 demand.setDemandNumber(resultSet.getString("numero_demande"));
                 String statutStr = resultSet.getString("statut");
-                demand.setStatus(DemandStatus.valueOf(statutStr.toUpperCase())); 
+                demand.setStatus(DemandStatus.valueOf(statutStr.toUpperCase()));
                 java.sql.Timestamp ts = resultSet.getTimestamp("date_creation");
                 if (ts != null) {
                     demand.setCreationDate(ts.toLocalDateTime());
@@ -41,16 +41,20 @@ public class DemandDAO extends BaseDAO<Demand> {
 
     public int insert(Demand demand) {
         String sql = "INSERT INTO " + tableName +
-                "(numero_demande, statut)" +
-                "VALUES (?, ?)" +
+                "(numero_demande, statut, user_id)" +
+                "VALUES (?, ?, ?)" +
                 ";";
 
         try (PreparedStatement pstmt = getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            pstmt.setString(1, "numero_demande");
-            pstmt.setString(2, "statut");
+            pstmt.setString(1, demand.getDemandNumber());
+            pstmt.setString(2, DemandStatus.PENDING.name());
+            pstmt.setInt(3, demand.getUsagerId());
+
+            pstmt.executeUpdate();
 
             ResultSet rs = pstmt.getGeneratedKeys();
+            System.out.println("Demand inserted");
 
             if (rs.next()) {
                 return rs.getInt(1);
@@ -80,6 +84,28 @@ public class DemandDAO extends BaseDAO<Demand> {
         return -1;
     }
 
+    public boolean updateDemandNumber(int demandId, String demandNumber) {
+
+        String sql = """
+        UPDATE demandes
+        SET numero_demande = ?
+        WHERE id = ?
+    """;
+
+        try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
+
+            ps.setString(1, demandNumber);
+            ps.setInt(2, demandId);
+
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
     public boolean updateStatus(int id, String status) {
 
         String sql = "UPDATE " + tableName + " SET statut = ? WHERE id = ?";
@@ -99,14 +125,14 @@ public class DemandDAO extends BaseDAO<Demand> {
     }
     
     public String registerEtGenererRef(Demand d) {
-    String sql = "INSERT INTO demandes (usager_id, type_acte, statut) VALUES (?, ?, ?)";
+    String sql = "INSERT INTO demandes (user_id, type_acte, statut) VALUES (?, ?, ?)";
     
     try (Connection conn = DatabaseConnection.getInstance().getConnection();
          PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
         
         pstmt.setInt(1, d.getUsagerId());
         pstmt.setString(2, d.getActType());
-        pstmt.setString(3, "SAVE");
+        pstmt.setString(3, DemandStatus.PENDING.name());
 
         pstmt.executeUpdate();
 
@@ -126,13 +152,12 @@ public class DemandDAO extends BaseDAO<Demand> {
                 PreparedStatement pstmt = conn.prepareStatement(sql)){
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
-            
+
             if(rs.next()){
                  statut = rs.getString("statut");
-                
+
             }
-            
-            
+
         }catch(Exception e ){
             System.err.println("Erreur lors de la lecture du statut de la demande" + e.getMessage());
         }

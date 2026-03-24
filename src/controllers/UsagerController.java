@@ -21,13 +21,18 @@ public class UsagerController {
         this.demandDAO = demandDAO;
     }
     
-    public boolean createDemand(AdministrativeActType actType){
+    public boolean createDemand(AdministrativeActType actType, int userId){
         try{
             Demand d = new Demand(actType);
-            String numeroDemande = demandDAO.registerEtGenererRef(d);
-            d.setDemandNumber(numeroDemande);
-            
-            
+            d.setUsagerId(userId);
+            int demandId = demandDAO.insert(d);
+
+            System.out.println("demand id: " + demandId);
+
+            d.setId(demandId);
+            d.generateDemandNumberFromId();
+
+            demandDAO.updateDemandNumber(d.getId(), d.getDemandNumber());
            return true;
         }catch(Exception e){
             System.err.println("Erreur lors de la création de demande");

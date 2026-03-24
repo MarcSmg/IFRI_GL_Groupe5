@@ -10,15 +10,9 @@ public class DatabaseConnection {
 
     private final String PORT = "3306";
     private final String DB_NAME = "acts_database";
-    /*private final String DB_URL = "jdbc:mysql://localhost:" + PORT + "/" + DB_NAME + "?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC";*/
-    private final String DB_URL = "jdbc:mysql://localhost:" + PORT + "/" + DB_NAME + 
-    "?useUnicode=true" +
-    "&characterEncoding=UTF-8" +
-    "&serverTimezone=UTC" +
-    "&useSSL=false" +
-    "&allowPublicKeyRetrieval=true";
-    private final String USER = "root";
-    private final String PASSWORD = "G#7yTq!9LmN&xw2";
+    private final String DB_URL = "jdbc:mysql://localhost:" + PORT + "/" + DB_NAME + "?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC";
+    private final String USER = "marc";
+    private final String PASSWORD = "marc";
     private Connection connection;
     private static DatabaseConnection instance;
 
@@ -26,7 +20,6 @@ public class DatabaseConnection {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection(DB_URL, USER, PASSWORD);
-            
         } catch (SQLException | ClassNotFoundException e) {
             System.err.println("!! Une erreur est subvenue lors de la connection : " + e.getMessage());
         }

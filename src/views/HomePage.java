@@ -333,10 +333,10 @@ public class HomePage extends JFrame {
 
         JButton loginBtn = buildWhiteButton("Se connecter");
         loginBtn.addActionListener(e -> {
-        ConnexionForm form = new ConnexionForm();
-        NavigationManager.showConnexion();
-        
-    });
+            ConnexionForm form = new ConnexionForm();
+            NavigationManager.showConnexion();
+        });
+
         loginBtn.setAlignmentX(CENTER_ALIGNMENT);
 
         inner.add(title);

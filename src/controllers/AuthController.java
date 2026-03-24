@@ -19,6 +19,7 @@ import javax.swing.*;
 public class AuthController {
     private final UserDAO userDAO;
     private final WhiteListDAO whiteListDAO;
+    private MainController mainController;
     public AuthController() {
         this.whiteListDAO = new WhiteListDAO();
         this.userDAO = new UserDAO();
@@ -182,15 +183,19 @@ public class AuthController {
                 NavigationManager.closeCurrent(view.getPanelPrincipal());
                 // creation du main 
                 MainFrame  mainFrame = new MainFrame();
-                SidebarPanel  sidebarPanel = new SidebarPanel();
-                NavigationController navigationController = new NavigationController(mainFrame);
-                SidebarController sidebarCtrl = new SidebarController(sidebarPanel, navigationController);
-                sidebarCtrl.configureFor(user);
-                JPanel contenuContainer = mainFrame.getContainer();
-                //
-                //contenuConteneur = 
-             
-                mainFrame.getRoot();
+
+                mainController = new MainController(mainFrame);
+                mainController.onLoginSuccess(user);
+
+//                SidebarPanel  sidebarPanel = new SidebarPanel();
+//                NavigationController navigationController = new NavigationController(mainFrame);
+//                SidebarController sidebarCtrl = new SidebarController(sidebarPanel, navigationController);
+//                sidebarCtrl.configureFor(user);
+//                JPanel contenuContainer = mainFrame.getContainer();
+//                //
+//                //contenuConteneur =
+//
+//                mainFrame.getRoot();
             }
             
         } else {

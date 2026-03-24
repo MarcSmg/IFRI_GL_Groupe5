@@ -81,7 +81,7 @@ public class DatabaseInitializer {
                 + "user_id INT NOT NULL, "
                 + "numero_demande VARCHAR(100), "
                 + "statut VARCHAR(50), "
-                + "type_act VARCHAR(50), "
+                + "type_acte VARCHAR(50), "
                 + "act_id INT, "
                 + "date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP, "
 

@@ -15,6 +15,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.RoundRectangle2D;
 import java.util.List;
+
+import dao.DemandDAO;
 import models.*;
 import models.enums.DemandStatus;
 import models.enums.AdministrativeActType;
