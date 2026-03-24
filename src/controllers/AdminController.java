@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package controllers;
+import dao.UserDAO;
 import models.*;
 import dao.*;
 import utilities.*;
